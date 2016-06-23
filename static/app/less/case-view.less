@@ -1,0 +1,31 @@
+.case-view {
+  .case-img {
+    text-align: left;
+    @media (max-width: 639px) {
+      text-align: center;
+    }
+  }
+  .serial {
+    width: 1px;
+  }
+  .empty {
+    font-style: italic;
+    color: #777;
+  }
+  .algs-table {
+    border-radius: 15px;
+    border-collapse: separate;
+    th,td {
+      border-top: none;
+      border-left: none;
+      &:last-child {
+        border-right: none;
+      }
+    }
+    tr:last-child {
+      td {
+        border-bottom: none;
+      }
+    }
+  }
+}

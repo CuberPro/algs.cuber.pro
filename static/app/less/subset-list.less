@@ -1,0 +1,28 @@
+table.subset-list {
+
+  td.case-name {
+    width: 1px;
+    white-space: nowrap;
+    vertical-align: middle !important;
+    text-align: center;
+  }
+
+  td.case-img {
+    width: 1px;
+    vertical-align: middle !important;
+    text-align: center;
+    img {
+      max-width: 100px;
+    }
+    @media (max-width: 359px) {
+      img {
+        max-width: 60px;
+      }
+    }
+  }
+
+  & > td.alg {
+    vertical-align: middle;
+    text-align: left;
+  }
+}

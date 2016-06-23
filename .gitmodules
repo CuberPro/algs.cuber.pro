@@ -1,0 +1,3 @@
+[submodule "web/visualcube"]
+	path = web/visualcube
+	url = https://github.com/CuberPro/visualcube
