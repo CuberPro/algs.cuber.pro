@@ -14,8 +14,6 @@ class CubeExpandAsset extends AssetBundle
         'less/expand.less',
     ];
     public $js = [
-        'http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js',
-        'js/cube.js',
     ];
     public $depends = [
         'app\assets\AppAsset',

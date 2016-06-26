@@ -11,7 +11,6 @@ CubeExpandAsset::register($this);
     the file <code><?= __FILE__; ?></code>.
 </p>
 
-<div id="app">{{hello}}</div>
 
 <table class="cube-expand">
     <tbody>
