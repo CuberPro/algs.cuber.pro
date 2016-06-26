@@ -20,7 +20,7 @@ class SubsetsController extends Controller {
         $cases = empty($subset) ? [] : $subset['cases'];
         array_walk($cases, function(&$item, $index) use ($subset) {
             $item['size'] = $subset['cube0']['size'];
-            $item['name'] = $item['subset'] . ' ' . (isset($item['alias']) ? $item['alias'] : $item['sequence']);
+            $item['name'] = isset($item['alias']) ? $item['alias'] : ($item['subset'] . ' ' .$item['sequence']);
             $item['view'] = $subset['view'];
             $algs = Cases::find()
                 ->where(['cube' => $subset['cube'], 'subset' => $subset['name'], 'sequence' => $item['sequence']])
@@ -34,6 +34,7 @@ class SubsetsController extends Controller {
             'key' => function ($model) {
                 return isset($model['alias']) ? $model['alias'] : $model['sequence'];
             },
+            'pagination' => false,
         ]);
         return $this->render('view', [
             'cubeId' => $cubeId,

@@ -30,10 +30,11 @@ class CasesController extends Controller {
             ->asArray()
             ->one();
         $case['size'] = $case['cube0']['size'];
-        $case['name'] = $case['subset'] . ' ' . (isset($case['alias']) ? $case['alias'] : $case['sequence']);
+        $case['name'] = isset($case['alias']) ? $case['alias'] : ($case['subset'] . ' ' .$case['sequence']);
         $case['view'] = $case['subset0']['view'];
         $dataProvider = new ArrayDataProvider([
             'allModels' => $case['algs'],
+            'pagination' => false,
         ]);
         return $this->render('view', [
             'cubeId' => $cubeId,

@@ -4,7 +4,6 @@ use app\assets\CubeSetAsset;
 use yii\widgets\ListView;
 
 $this->title = Yii::t('app', 'Cubes');
-$this->params['breadcrumbs'][] = $this->title;
 
 CubeSetAsset::register($this);
 

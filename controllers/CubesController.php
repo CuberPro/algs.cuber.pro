@@ -18,6 +18,7 @@ class CubesController extends Controller {
         $dataProvider = new ArrayDataProvider([
             'allModels' => $cubes,
             'key' => 'id',
+            'pagination' => false,
         ]);
 
         return $this->render('index', [
@@ -45,6 +46,7 @@ class CubesController extends Controller {
         $dataProvider = new ArrayDataProvider([
             'allModels' => $subsets,
             'key' => 'name',
+            'pagination' => false,
         ]);
 
         return $this->render('view', [
