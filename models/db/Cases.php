@@ -14,7 +14,9 @@ use Yii;
  * @property string $state
  *
  * @property AlgsForCase[] $algsForCases
+ * @property Algs[] $algs
  * @property Subsets $subset0
+ * @property Cubes $cube0
  */
 class Cases extends \yii\db\ActiveRecord
 {
@@ -38,7 +40,7 @@ class Cases extends \yii\db\ActiveRecord
             [['subset'], 'string', 'max' => 20],
             [['alias'], 'string', 'max' => 50],
             [['state'], 'string', 'max' => 300],
-            [['cube', 'subset', 'alias'], 'unique', 'targetAttribute' => ['cube', 'subset', 'alias'], 'message' => 'The combination of Cube, Subset and Alias has already been taken.'],
+            [['cube', 'subset', 'alias'], 'unique', 'filter' => ['NOT', ['alias' => null]], 'targetAttribute' => ['cube', 'subset', 'alias'], 'message' => 'The combination of Cube, Subset and Alias has already been taken.'],
             [['cube', 'subset'], 'exist', 'skipOnError' => true, 'targetClass' => Subsets::className(), 'targetAttribute' => ['cube' => 'cube', 'subset' => 'name']],
         ];
     }

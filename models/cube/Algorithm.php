@@ -31,6 +31,104 @@ class Algorithm extends Model {
         return $tmp;
     }
 
+    public function getReverse($prefix = false) {
+        $REVERSE_MAP = [
+            "'" => '',
+            '2' => "2'",
+            "2'" => '2',
+        ];
+        $rev = [];
+        $prefixes = [];
+        foreach ($this->moves as $move) {
+            $tmp = '';
+            preg_match(self::MOVE_PATTERN, $move, $matches);
+            if (!empty($matches[2])) {
+                $end = empty($matches[1]) ? 2 : intval($matches[1]);
+                $tmp .= empty($matches[1]) ? '' : $matches[1];
+                $tmp .= $matches[2] . 'w';
+            } else {
+                $tmp .= $matches[3];
+            }
+            $tmp .= empty($matches[4]) ? "'" : $REVERSE_MAP[$matches[4]];
+            if ($prefix) {
+                switch ($tmp) {
+                    case "Rw":
+                    case "M'":
+                    case "Lw'":
+                    case "x":
+                        $prefixes[] = "x'";
+                        break;
+                    case "Rw'":
+                    case "M":
+                    case "Lw":
+                    case "x'":
+                        $prefixes[] = "x";
+                        break;
+                    case "Rw2":
+                    case "Rw2'":
+                    case "M2":
+                    case "M2'":
+                    case "Lw2":
+                    case "Lw2'":
+                    case "x2":
+                    case "x2'":
+                        $prefixes[] = "x2";
+                        break;
+                    case "Uw":
+                    case "E'":
+                    case "Dw'":
+                    case "y":
+                        $prefixes[] = "y'";
+                        break;
+                    case "Uw'":
+                    case "E":
+                    case "Dw":
+                    case "y'":
+                        $prefixes[] = "y";
+                        break;
+                    case "Uw2":
+                    case "Uw2'":
+                    case "E2":
+                    case "E2'":
+                    case "Dw2":
+                    case "Dw2'":
+                    case "y2":
+                    case "y2'":
+                        $prefixes[] = "y2";
+                        break;
+                    case "Fw":
+                    case "S":
+                    case "Bw'":
+                    case "z":
+                        $prefixes[] = "z'";
+                        break;
+                    case "Fw'":
+                    case "S'":
+                    case "Bw":
+                    case "z'":
+                        $prefixes[] = "z";
+                        break;
+                    case "Fw2":
+                    case "Fw2'":
+                    case "S2":
+                    case "S2'":
+                    case "Bw2":
+                    case "Bw2'":
+                    case "z2":
+                    case "z2'":
+                        $prefixes[] = "z2";
+                        break;
+                }
+            }
+            array_unshift($rev, $tmp);
+        }
+        return new Algorithm(implode(' ', array_merge($prefixes, $rev)));
+    }
+
+    public function __toString() {
+        return implode(' ', $this->moves);
+    }
+
     public function applyTo(CubeNNN $cube) {
         foreach ($this->moves as $move) {
             preg_match(self::MOVE_PATTERN, $move, $matches);

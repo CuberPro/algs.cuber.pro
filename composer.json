@@ -16,6 +16,7 @@
         "yiisoft/yii2-bootstrap": "^2.0"
     },
     "require-dev": {
+        "electrolinux/phpquery": "*",
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",
         "yiisoft/yii2-faker": "*"

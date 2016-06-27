@@ -325,6 +325,24 @@ class CubeNNN extends Model {
         return implode(array_map('implode', $this->stickers));
     }
 
+    public function setStickersString(string $stickers) {
+        $rangeStr = self::U . self::R . self::F . self::D . self::L . self::B . self::NONE;
+        $stickersPerFace = $this->size * $this->size;
+        $stickersTotal = $stickersPerFace * 6;
+        $regex = "/^[{$rangeStr}]{{$stickersTotal}}$/";
+        if (!preg_match($regex, $stickers)) {
+            return false;
+        }
+        $this->stickers = [
+            self::U => str_split(substr($stickers, 0, $stickersPerFace)),
+            self::R => str_split(substr($stickers, $stickersPerFace, $stickersPerFace)),
+            self::F => str_split(substr($stickers, $stickersPerFace * 2, $stickersPerFace)),
+            self::D => str_split(substr($stickers, $stickersPerFace * 3, $stickersPerFace)),
+            self::L => str_split(substr($stickers, $stickersPerFace * 4, $stickersPerFace)),
+            self::B => str_split(substr($stickers, $stickersPerFace * 5, $stickersPerFace)),
+        ];
+    }
+
     public function __toString() {
         $str = '';
         for ($i = 0; $i < $this->size; $i++) {
