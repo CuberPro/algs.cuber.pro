@@ -120,8 +120,8 @@ If you want to enable cache of the submodule `visualcube`, also run the `db_sche
 
 To protect some private credentials, it is highly recommended to have a 'local copy' of some config files. In this project, there are two.
 
- - One is `config/cookie.php`, copy it to `cookie.local.php` and add some random string to its content, this is used by  `cookieValidationKey`;
- - The other one is `config/db.php`, copy it to `db.local.php`, it has the credentials for the database, so configure it according to your own situation.
+ - One is `config/web/request.php`, copy it to `request.local.php` and add a random string to `cookieValidationKey`;
+ - The other one is `config/common/db.php`, copy it to `db.local.php`, it has the credentials for the database, so configure it according to your own situation.
 
 #### Visualcube Configurations
 

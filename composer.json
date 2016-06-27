@@ -36,8 +36,8 @@
             "npm install -g less less-plugin-autoprefix less-plugin-clean-css"
         ],
         "create-local-config-files": [
-            "[[ -f config/db.local.php ]] || cp -n config/db.php config/db.local.php",
-            "[[ -f config/cookie.local.php ]] || cp -n config/cookie.php config/cookie.local.php"
+            "[[ -f config/common/db.local.php ]] || cp -n config/common/db.php config/common/db.local.php",
+            "[[ -f config/web/request.local.php ]] || cp -n config/web/request.php config/web/request.local.php"
         ],
         "post-create-project-cmd": [
             "yii\\composer\\Installer::postCreateProject"
