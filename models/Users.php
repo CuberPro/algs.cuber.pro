@@ -20,6 +20,11 @@ class Users extends ActiveRecord implements IdentityInterface {
 
     const AUTH_KEY_PREFIX = 'algs_users_auth_key_';
     const COOKIE_VALID_TIME = 86400;
+
+    const STATUS_ACTIVATED = 0;
+    const STATUS_NEEDS_CONFIRM = 1;
+    const STATUS_BANNED = 2;
+
     /**
      * @inheritdoc
      */

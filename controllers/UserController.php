@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\helpers\Url;
 use app\models\LoginForm;
+use app\models\SignupForm;
 
 class UserController extends Controller {
 
@@ -24,6 +25,23 @@ class UserController extends Controller {
         }
         $model->plainPassword = null;
         return $this->render('login', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionSignup($u = '/') {
+        $request = Yii::$app->request;
+        $model = new SignupForm;
+        $model->u = Url::toRoute([$u]);
+        if ($request ->isPost) {
+            $model->load($request->post());
+            $success = $model->signup();
+            if ($success) {
+                return $this->redirect($model->u);
+            }
+        }
+        $model->plainPassword = null;
+        return $this->render('signup', [
             'model' => $model,
         ]);
     }

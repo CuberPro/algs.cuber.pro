@@ -30,6 +30,10 @@ if (Yii::$app->user->identity != null) {
             'label' => 'Sign In',
             'url' => Url::toRoute(['user/login', 'u' => Url::to()]),
         ],
+        [
+            'label' => 'Sign Up',
+            'url' => Url::toRoute(['user/signup', 'u' => Url::to()]),
+        ],
     ];
 }
 ?>
