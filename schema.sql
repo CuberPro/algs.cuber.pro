@@ -139,6 +139,28 @@ CREATE TABLE IF NOT EXISTS `Subsets` (
 --       `Cubes` -> `id`
 --
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Users`
+--
+
+CREATE TABLE IF NOT EXISTS `Users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'user id',
+  `name` varchar(100) NOT NULL COMMENT 'user name',
+  `password` varchar(255) NOT NULL COMMENT 'password hash',
+  `email` varchar(255) NOT NULL COMMENT 'user email',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'register time',
+  `status` int(11) NOT NULL COMMENT 'user status',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+--
+-- RELATIONS FOR TABLE `Users`:
+--
+
 --
 -- Constraints for dumped tables
 --
