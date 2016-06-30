@@ -11,6 +11,7 @@ use Yii;
  * @property string $text
  *
  * @property AlgsForCase[] $algsForCases
+ * @property Cases[] $cases
  */
 class Algs extends \yii\db\ActiveRecord
 {
@@ -51,5 +52,13 @@ class Algs extends \yii\db\ActiveRecord
     public function getAlgsForCases()
     {
         return $this->hasMany(AlgsForCase::className(), ['alg' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCases()
+    {
+        return $this->hasMany(Cases::className(), ['id' => 'case'])->viaTable('Algs_For_Case', ['alg' => 'id']);
     }
 }

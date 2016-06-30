@@ -7,16 +7,12 @@ use Yii;
 /**
  * This is the model class for table "Cases".
  *
- * @property string $cube
- * @property string $subset
- * @property integer $sequence
- * @property string $alias
+ * @property string $id
  * @property string $state
  *
  * @property AlgsForCase[] $algsForCases
  * @property Algs[] $algs
- * @property Subsets $subset0
- * @property Cubes $cube0
+ * @property CasesInSubset[] $casesInSubsets
  */
 class Cases extends \yii\db\ActiveRecord
 {
@@ -34,14 +30,10 @@ class Cases extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cube', 'subset', 'sequence', 'state'], 'required'],
-            [['sequence'], 'integer'],
-            [['cube'], 'string', 'max' => 10],
-            [['subset'], 'string', 'max' => 20],
-            [['alias'], 'string', 'max' => 50],
+            [['id', 'state'], 'required'],
+            [['id'], 'string', 'max' => 32],
             [['state'], 'string', 'max' => 300],
-            [['cube', 'subset', 'alias'], 'unique', 'filter' => ['NOT', ['alias' => null]], 'targetAttribute' => ['cube', 'subset', 'alias'], 'message' => 'The combination of Cube, Subset and Alias has already been taken.'],
-            [['cube', 'subset'], 'exist', 'skipOnError' => true, 'targetClass' => Subsets::className(), 'targetAttribute' => ['cube' => 'cube', 'subset' => 'name']],
+            [['state'], 'unique'],
         ];
     }
 
@@ -51,10 +43,7 @@ class Cases extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'cube' => Yii::t('db', 'Cube'),
-            'subset' => Yii::t('db', 'Subset'),
-            'sequence' => Yii::t('db', 'Sequence'),
-            'alias' => Yii::t('db', 'Alias'),
+            'id' => Yii::t('db', 'ID'),
             'state' => Yii::t('db', 'State'),
         ];
     }
@@ -64,22 +53,22 @@ class Cases extends \yii\db\ActiveRecord
      */
     public function getAlgsForCases()
     {
-        return $this->hasMany(AlgsForCase::className(), ['cube' => 'cube', 'subset' => 'subset', 'sequence' => 'sequence']);
-    }
-
-    public function getAlgs() {
-        return $this->hasMany(Algs::className(), ['id' => 'alg'])->via('algsForCases');
+        return $this->hasMany(AlgsForCase::className(), ['case' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSubset0()
+    public function getAlgs()
     {
-        return $this->hasOne(Subsets::className(), ['cube' => 'cube', 'name' => 'subset']);
+        return $this->hasMany(Algs::className(), ['id' => 'alg'])->viaTable('Algs_For_Case', ['case' => 'id']);
     }
 
-    public function getCube0() {
-        return $this->hasOne(Cubes::className(), ['id' => 'cube']);
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCasesInSubsets()
+    {
+        return $this->hasMany(CasesInSubset::className(), ['case' => 'id']);
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2016 at 12:56 PM
+-- Generation Time: Jun 29, 2016 at 07:03 PM
 -- Server version: 5.6.31
 -- PHP Version: 7.0.7
 
@@ -46,23 +46,17 @@ CREATE TABLE IF NOT EXISTS `Algs` (
 
 CREATE TABLE IF NOT EXISTS `Algs_For_Case` (
   `alg` char(32) NOT NULL COMMENT 'id of an alg',
-  `cube` varchar(10) NOT NULL COMMENT 'cube applied to',
-  `subset` varchar(20) NOT NULL COMMENT 'subset of the case',
-  `sequence` int(11) NOT NULL COMMENT 'sequence in the subset',
-  UNIQUE KEY `alg` (`alg`,`subset`) USING BTREE,
-  KEY `case` (`cube`,`subset`,`sequence`) USING BTREE
+  `case` char(32) NOT NULL COMMENT 'id of the case',
+  UNIQUE KEY `alg_for_case` (`alg`,`case`) USING BTREE,
+  KEY `Algs_For_Case_ibfk_2` (`case`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- RELATIONS FOR TABLE `Algs_For_Case`:
 --   `alg`
 --       `Algs` -> `id`
---   `cube`
---       `Cases` -> `cube`
---   `subset`
---       `Cases` -> `subset`
---   `sequence`
---       `Cases` -> `sequence`
+--   `case`
+--       `Cases` -> `id`
 --
 
 -- --------------------------------------------------------
@@ -72,21 +66,41 @@ CREATE TABLE IF NOT EXISTS `Algs_For_Case` (
 --
 
 CREATE TABLE IF NOT EXISTS `Cases` (
-  `cube` varchar(10) NOT NULL COMMENT 'cube applied to',
-  `subset` varchar(20) NOT NULL COMMENT 'subset this case belongs to',
-  `sequence` int(11) NOT NULL COMMENT 'sequence in the subset',
-  `alias` varchar(50) DEFAULT NULL COMMENT 'alias for a case',
-  `state` varchar(300) NOT NULL COMMENT 'sticker states',
-  PRIMARY KEY (`cube`,`subset`,`sequence`),
-  UNIQUE KEY `alias` (`cube`,`subset`,`alias`) USING BTREE
+  `id` char(32) NOT NULL COMMENT 'md5 hash of state',
+  `state` varchar(300) CHARACTER SET ascii NOT NULL COMMENT 'sticker states',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `state` (`state`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- RELATIONS FOR TABLE `Cases`:
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Cases_In_Subset`
+--
+
+CREATE TABLE IF NOT EXISTS `Cases_In_Subset` (
+  `cube` varchar(10) NOT NULL COMMENT 'cube id',
+  `subset` varchar(50) NOT NULL COMMENT 'subset name',
+  `case` char(32) NOT NULL COMMENT 'case id',
+  `sequence` int(11) NOT NULL COMMENT 'case order in subset',
+  `alias` varchar(50) DEFAULT NULL COMMENT 'case alias',
+  UNIQUE KEY `unique_case` (`cube`,`subset`,`sequence`,`case`) USING BTREE,
+  UNIQUE KEY `unique_alias` (`cube`,`subset`,`sequence`,`alias`) USING BTREE,
+  KEY `Cases_In_Subset_ibfk_2` (`case`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- RELATIONS FOR TABLE `Cases_In_Subset`:
 --   `cube`
 --       `Subsets` -> `cube`
 --   `subset`
 --       `Subsets` -> `name`
+--   `case`
+--       `Cases` -> `id`
 --
 
 -- --------------------------------------------------------
@@ -134,13 +148,14 @@ CREATE TABLE IF NOT EXISTS `Subsets` (
 --
 ALTER TABLE `Algs_For_Case`
   ADD CONSTRAINT `Algs_For_Case_ibfk_1` FOREIGN KEY (`alg`) REFERENCES `Algs` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `Algs_For_Case_ibfk_2` FOREIGN KEY (`cube`,`subset`,`sequence`) REFERENCES `Cases` (`cube`, `subset`, `sequence`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Algs_For_Case_ibfk_2` FOREIGN KEY (`case`) REFERENCES `Cases` (`id`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `Cases`
+-- Constraints for table `Cases_In_Subset`
 --
-ALTER TABLE `Cases`
-  ADD CONSTRAINT `Cases_ibfk_1` FOREIGN KEY (`cube`,`subset`) REFERENCES `Subsets` (`cube`, `name`) ON UPDATE CASCADE;
+ALTER TABLE `Cases_In_Subset`
+  ADD CONSTRAINT `Cases_In_Subset_ibfk_1` FOREIGN KEY (`cube`,`subset`) REFERENCES `Subsets` (`cube`, `name`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `Cases_In_Subset_ibfk_2` FOREIGN KEY (`case`) REFERENCES `Cases` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Subsets`

@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use Yii;
+use app\models\db\CasesInSubset;
 use app\models\db\Cases;
 use yii\data\ArrayDataProvider;
 use yii\web\Controller;
@@ -13,7 +13,7 @@ use yii\web\Controller;
 class CasesController extends Controller {
 
     public function actionView($cubeId, $subsetName, $caseName) {
-        $case = Cases::find()
+        $case = CasesInSubset::find()
             ->where([
                 'AND',
                 ['cube' => $cubeId],
@@ -26,12 +26,22 @@ class CasesController extends Controller {
             ])
             ->with('cube0')
             ->with('subset0')
-            ->with('algs')
+            ->with('case0')
             ->asArray()
             ->one();
+        $algs = [];
+        if ($case) {
+            $algs = Cases::find()
+                ->where(['id' => $case['case']])
+                ->with('algs')
+                ->asArray()
+                ->one()['algs'];
+        }
+        $case['algs'] = $algs;
         $case['size'] = $case['cube0']['size'];
         $case['name'] = isset($case['alias']) ? $case['alias'] : ($case['subset'] . ' ' .$case['sequence']);
         $case['view'] = $case['subset0']['view'];
+        $case['state'] = $case['case0']['state'];
         $dataProvider = new ArrayDataProvider([
             'allModels' => $case['algs'],
             'pagination' => false,

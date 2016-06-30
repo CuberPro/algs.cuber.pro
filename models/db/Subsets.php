@@ -11,6 +11,7 @@ use Yii;
  * @property string $name
  * @property string $view
  *
+ * @property CasesInSubset[] $casesInSubsets
  * @property Cases[] $cases
  * @property Cubes $cube0
  */
@@ -52,9 +53,13 @@ class Subsets extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCases()
+    public function getCasesInSubsets()
     {
-        return $this->hasMany(Cases::className(), ['cube' => 'cube', 'subset' => 'name']);
+        return $this->hasMany(CasesInSubset::className(), ['cube' => 'cube', 'subset' => 'name']);
+    }
+
+    public function getCases() {
+        return $this->hasMany(Cases::className(), ['id' => 'case'])->viaTable('Cases_In_Subset', ['cube' => 'cube', 'subset' => 'name']);
     }
 
     /**
