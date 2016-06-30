@@ -13,6 +13,7 @@ Table of Contents
  - [Install Composer](#install-composer)
  - [Install NPM](#install-npm)
  - [Install Imagemagick](#install-imagemagick)
+ - [Install Memcached](#install-memcached)
  - [Install Dependencies](#install-dependencies)
  - [Nginx Configuration](#nginx-configuration)
  - [PHP Configuration](#php-configuration)
@@ -74,6 +75,12 @@ brew install npm
 
 ```bash
 brew install imagemagick
+```
+
+### Install Memcached
+
+```bash
+brew install memcached
 ```
 
 Then we come to the configurations and preparations. I'll skip the details of configuring `nginx` and `php` to make them work together. There are lots of tutorials on the internet...
