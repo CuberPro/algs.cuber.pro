@@ -5,6 +5,7 @@ namespace app\commands;
 use yii\console\Controller;
 use app\models\db\Subsets;
 use app\models\db\Cases;
+use app\models\db\CasesInSubset;
 use app\models\cube\Algorithm;
 use app\models\cube\CubeNNN;
 use phpQuery;
@@ -57,10 +58,11 @@ class ImportController extends Controller {
                 // break 2;
             }
         }
-        echo "\n";
+        // echo "\n";
     }
 
     private function getCases($url, $cube, $subset) {
+        $count = 0;
         phpQuery::newDocumentFile($url);
         $trs = pq('tbody tr');
         foreach ($trs as $idx => $tr) {
@@ -89,22 +91,43 @@ class ImportController extends Controller {
                 'subset' => $subset->name,
                 'sequence' => $seq,
             ];
-            $case = Cases::findOne($data);
-            if ($case == null) {
-                $case = new Cases;
-                $case->load(['Cases' => $data]);
-                $case->alias = $alias;
-                $case->state = $state;
-                $success = $case->save();
-                if (!$success) {
-                    var_dump($data);
-                    exit;
+            $caseInSubset = CasesInSubset::findOne($data);
+            if ($caseInSubset == null) {
+                $case = Cases::findOne(['state' => $state]);
+                if (!$case) {
+                    $case = new Cases([
+                        'id' => md5($state),
+                        'state' => $state,
+                    ]);
                 }
+                Cases::getDb()->transaction(function ($db) use ($cube, $subset, $case, $seq, $alias) {
+                    $success = $case->save();
+                    if (!$success) {
+                        var_dump($case->attributes);
+                        exit;
+                    }
+                    $caseInSubset = new CasesInSubset([
+                        'cube' => $cube,
+                        'subset' => $subset->name,
+                        'case' => $case->id,
+                        'sequence' => $seq,
+                        'alias' => $alias,
+                    ]);
+                    $success = $caseInSubset->save();
+                    if (!$success) {
+                        var_dump($caseInSubset->attributes);
+                        exit;
+                    }
+                });
+                $count++;
             }
             // exit;
         }
-        echo "\r                                                                ";
-        echo "\rURL: $url, count: {$trs->size()}";
+        // echo "\r                                                                ";
+        echo "URL: $url, total: {$trs->size()}, added: {$count}\n";
+        if ($trs->size() !== $count) {
+            echo '!!!!!!!!!!!!!!!!!!!!!!' . PHP_EOL;
+        }
     }
 
     private function getNewCube($id, $subset) {

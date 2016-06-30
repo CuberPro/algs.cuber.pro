@@ -8,12 +8,10 @@ use Yii;
  * This is the model class for table "Algs_For_Case".
  *
  * @property string $alg
- * @property string $cube
- * @property string $subset
- * @property integer $sequence
+ * @property string $case
  *
  * @property Algs $alg0
- * @property Cases $cube0
+ * @property Cases $case0
  */
 class AlgsForCase extends \yii\db\ActiveRecord
 {
@@ -31,14 +29,11 @@ class AlgsForCase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['alg', 'cube', 'subset', 'sequence'], 'required'],
-            [['sequence'], 'integer'],
-            [['alg'], 'string', 'max' => 32],
-            [['cube'], 'string', 'max' => 10],
-            [['subset'], 'string', 'max' => 20],
-            [['alg', 'subset'], 'unique', 'targetAttribute' => ['alg', 'subset'], 'message' => 'The combination of Alg and Subset has already been taken.'],
+            [['alg', 'case'], 'required'],
+            [['alg', 'case'], 'string', 'max' => 32],
+            [['alg', 'case'], 'unique', 'targetAttribute' => ['alg', 'case'], 'message' => 'The combination of Alg and Case has already been taken.'],
             [['alg'], 'exist', 'skipOnError' => true, 'targetClass' => Algs::className(), 'targetAttribute' => ['alg' => 'id']],
-            [['cube', 'subset', 'sequence'], 'exist', 'skipOnError' => true, 'targetClass' => Cases::className(), 'targetAttribute' => ['cube' => 'cube', 'subset' => 'subset', 'sequence' => 'sequence']],
+            [['case'], 'exist', 'skipOnError' => true, 'targetClass' => Cases::className(), 'targetAttribute' => ['case' => 'id']],
         ];
     }
 
@@ -49,9 +44,7 @@ class AlgsForCase extends \yii\db\ActiveRecord
     {
         return [
             'alg' => Yii::t('db', 'Alg'),
-            'cube' => Yii::t('db', 'Cube'),
-            'subset' => Yii::t('db', 'Subset'),
-            'sequence' => Yii::t('db', 'Sequence'),
+            'case' => Yii::t('db', 'Case'),
         ];
     }
 
@@ -66,8 +59,8 @@ class AlgsForCase extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCube0()
+    public function getCase0()
     {
-        return $this->hasOne(Cases::className(), ['cube' => 'cube', 'subset' => 'subset', 'sequence' => 'sequence']);
+        return $this->hasOne(Cases::className(), ['id' => 'case']);
     }
 }
