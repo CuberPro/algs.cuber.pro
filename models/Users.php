@@ -28,16 +28,14 @@ class Users extends ActiveRecord implements IdentityInterface {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'Users';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'password', 'email', 'status'], 'required'],
             [['created'], 'safe'],
@@ -52,8 +50,7 @@ class Users extends ActiveRecord implements IdentityInterface {
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('db', 'ID'),
             'name' => Yii::t('db', 'Name'),

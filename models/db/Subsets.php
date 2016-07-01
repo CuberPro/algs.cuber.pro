@@ -15,21 +15,18 @@ use Yii;
  * @property Cases[] $cases
  * @property Cubes $cube0
  */
-class Subsets extends \yii\db\ActiveRecord
-{
+class Subsets extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'Subsets';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['cube', 'name'], 'required'],
             [['cube', 'view'], 'string', 'max' => 10],
@@ -41,8 +38,7 @@ class Subsets extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'cube' => Yii::t('db', 'Cube'),
             'name' => Yii::t('db', 'Name'),
@@ -53,8 +49,7 @@ class Subsets extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCasesInSubsets()
-    {
+    public function getCasesInSubsets() {
         return $this->hasMany(CasesInSubset::className(), ['cube' => 'cube', 'subset' => 'name']);
     }
 
@@ -65,8 +60,7 @@ class Subsets extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCube0()
-    {
+    public function getCube0() {
         return $this->hasOne(Cubes::className(), ['id' => 'cube']);
     }
 }

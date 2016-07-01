@@ -14,21 +14,18 @@ use Yii;
  * @property Algs[] $algs
  * @property CasesInSubset[] $casesInSubsets
  */
-class Cases extends \yii\db\ActiveRecord
-{
+class Cases extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'Cases';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'state'], 'required'],
             [['id'], 'string', 'max' => 32],
@@ -40,8 +37,7 @@ class Cases extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('db', 'ID'),
             'state' => Yii::t('db', 'State'),
@@ -51,24 +47,21 @@ class Cases extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAlgsForCases()
-    {
+    public function getAlgsForCases() {
         return $this->hasMany(AlgsForCase::className(), ['case' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAlgs()
-    {
+    public function getAlgs() {
         return $this->hasMany(Algs::className(), ['id' => 'alg'])->viaTable('Algs_For_Case', ['case' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCasesInSubsets()
-    {
+    public function getCasesInSubsets() {
         return $this->hasMany(CasesInSubset::className(), ['case' => 'id']);
     }
 }

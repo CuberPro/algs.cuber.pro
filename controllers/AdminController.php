@@ -8,10 +8,9 @@ use app\models\cube\Algorithm;
 use app\models\Users;
 use yii\web\Controller;
 
-class AdminController extends Controller
-{
-    public function actionIndex()
-    {
+class AdminController extends Controller {
+
+    public function actionIndex() {
         $cube = new CubeNNN(3);
         $algo = new Algorithm("R U R' x");
         $rev = $algo->getReverse(true);

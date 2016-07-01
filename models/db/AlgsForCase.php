@@ -13,21 +13,18 @@ use Yii;
  * @property Algs $alg0
  * @property Cases $case0
  */
-class AlgsForCase extends \yii\db\ActiveRecord
-{
+class AlgsForCase extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'Algs_For_Case';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['alg', 'case'], 'required'],
             [['alg', 'case'], 'string', 'max' => 32],
@@ -40,8 +37,7 @@ class AlgsForCase extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'alg' => Yii::t('db', 'Alg'),
             'case' => Yii::t('db', 'Case'),
@@ -51,16 +47,14 @@ class AlgsForCase extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAlg0()
-    {
+    public function getAlg0() {
         return $this->hasOne(Algs::className(), ['id' => 'alg']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCase0()
-    {
+    public function getCase0() {
         return $this->hasOne(Cases::className(), ['id' => 'case']);
     }
 }

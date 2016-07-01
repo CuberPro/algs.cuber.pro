@@ -7,8 +7,7 @@ use yii\web\AssetBundle;
 /**
  * @author Yunqi Ouyang
  */
-class CubeExpandAsset extends AssetBundle
-{
+class CubeExpandAsset extends AssetBundle {
     public $sourcePath = '@app/static/app';
     public $css = [
         'less/expand.less',
