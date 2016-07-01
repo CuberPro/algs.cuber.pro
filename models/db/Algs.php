@@ -53,6 +53,6 @@ class Algs extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     public function getCases() {
-        return $this->hasMany(Cases::className(), ['id' => 'case'])->viaTable('Algs_For_Case', ['alg' => 'id']);
+        return $this->hasMany(Cases::className(), ['id' => 'case'])->via('algsForCases');
     }
 }

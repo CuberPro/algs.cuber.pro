@@ -62,7 +62,7 @@ class CasesInSubset extends \yii\db\ActiveRecord {
     }
 
     public function getCube0() {
-        return $this->hasOne(Cubes::className(), ['id' => 'cube'])->viaTable('Subsets', ['cube' => 'cube', 'name' => 'subset']);
+        return $this->hasOne(Cubes::className(), ['id' => 'cube'])->via('subset0');
     }
 
     /**

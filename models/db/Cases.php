@@ -55,7 +55,7 @@ class Cases extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     public function getAlgs() {
-        return $this->hasMany(Algs::className(), ['id' => 'alg'])->viaTable('Algs_For_Case', ['case' => 'id']);
+        return $this->hasMany(Algs::className(), ['id' => 'alg'])->via('algsForCases');
     }
 
     /**
@@ -63,5 +63,13 @@ class Cases extends \yii\db\ActiveRecord {
      */
     public function getCasesInSubsets() {
         return $this->hasMany(CasesInSubset::className(), ['case' => 'id']);
+    }
+
+    public function getSubsets() {
+        return $this->hasMany(Subsets::className(), ['cube' => 'cube', 'name' => 'subset'])->via('casesInSubsets');
+    }
+
+    public function getCube() {
+        return $this->hasOne(Cubes::className(), ['id' => 'cube'])->via('subsets');
     }
 }

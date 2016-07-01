@@ -54,7 +54,7 @@ class Subsets extends \yii\db\ActiveRecord {
     }
 
     public function getCases() {
-        return $this->hasMany(Cases::className(), ['id' => 'case'])->viaTable('Cases_In_Subset', ['cube' => 'cube', 'subset' => 'name']);
+        return $this->hasMany(Cases::className(), ['id' => 'case'])->via('casesInSubsets');
     }
 
     /**
