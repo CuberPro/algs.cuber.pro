@@ -11,6 +11,7 @@ $components = require(__DIR__ . '/components.php');
 
 $config = [
     'id' => 'algs',
+    'name' => 'Cuber Pro',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => $components,

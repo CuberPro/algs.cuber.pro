@@ -26,7 +26,7 @@
     },
     "scripts": {
         "pre-update-cmd": [
-            "@composer global require \"fxp/composer-asset-plugin:~1.1.1\""
+            "@composer global require \"fxp/composer-asset-plugin:^1.2.0\""
         ],
         "post-update-cmd": [
             "@create-local-config-files",
