@@ -46,7 +46,7 @@ class LoginForm extends Users {
             $this->addError('plainPassword', 'The password is incorrect.');
             return false;
         }
-        return Yii::$app->user->login($user, $this->remember ? Users::COOKIE_VALID_TIME : 0);
+        return Yii::$app->user->login($user, $this->remember ? Yii::$app->params['user.rememberLoginTime'] : 0);
     }
 
 }

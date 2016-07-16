@@ -19,7 +19,6 @@ use yii\web\IdentityInterface;
 class Users extends ActiveRecord implements IdentityInterface {
 
     const AUTH_KEY_PREFIX = 'algs_users_auth_key_';
-    const COOKIE_VALID_TIME = 86400;
 
     const STATUS_ACTIVATED = 0;
     const STATUS_NEEDS_CONFIRM = 1;
@@ -90,8 +89,8 @@ class Users extends ActiveRecord implements IdentityInterface {
                 unset($cachedAuthKeys[$key]);
             }
         }
-        $cachedAuthKeys[$authKey] = $now + self::COOKIE_VALID_TIME;
-        $cache->set($this->authKeyCacheKey, $cachedAuthKeys, self::COOKIE_VALID_TIME);
+        $cachedAuthKeys[$authKey] = $now + Yii::$app->params['user.rememberLoginTime'];
+        $cache->set($this->authKeyCacheKey, $cachedAuthKeys, Yii::$app->params['user.rememberLoginTime']);
         return $authKey;
     }
 
