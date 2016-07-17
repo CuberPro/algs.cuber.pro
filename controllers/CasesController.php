@@ -39,7 +39,7 @@ class CasesController extends Controller {
         }
         $case['algs'] = $algs;
         $case['size'] = $case['cube0']['size'];
-        $case['name'] = isset($case['alias']) ? $case['alias'] : ($case['subset'] . ' ' .$case['sequence']);
+        $case['name'] = isset($case['alias']) ? $case['alias'] : ($case['subset'] . ' ' . $case['sequence']);
         $case['view'] = $case['subset0']['view'];
         $case['state'] = $case['case0']['state'];
         $dataProvider = new ArrayDataProvider([

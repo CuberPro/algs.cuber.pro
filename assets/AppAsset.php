@@ -11,7 +11,6 @@ class AppAsset extends AssetBundle {
         'less/site.less',
     ];
     public $depends = [
-        // 'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
 }

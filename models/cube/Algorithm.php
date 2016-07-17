@@ -51,73 +51,28 @@ class Algorithm extends Model {
             }
             $tmp .= empty($matches[4]) ? "'" : $REVERSE_MAP[$matches[4]];
             if ($prefix) {
-                switch ($tmp) {
-                    case "Rw":
-                    case "M'":
-                    case "Lw'":
-                    case "x":
-                        $prefixes[] = "x'";
+                $moveMap = [
+                    "x'" => ["Rw", "M'", "Lw'", "x"],
+                    "x" => ["Rw'", "M", "Lw", "x'"],
+                    "x2" => [
+                        "Rw2", "Rw2'", "M2", "M2'", "Lw2", "Lw2'", "x2", "x2'"
+                    ],
+                    "y'" => ["Uw", "E'", "Dw'", "y"],
+                    "y" => ["Uw'", "E", "Dw", "y'"],
+                    "y2" => [
+                        "Uw2", "Uw2'", "E2", "E2'", "Dw2", "Dw2'", "y2", "y2'"
+                    ],
+                    "z'" => ["Fw", "S", "Bw'", "z"],
+                    "z" => ["Fw'", "S'", "Bw", "z'"],
+                    "z2" => [
+                        "Fw2", "Fw2'", "S2", "S2'", "Bw2", "Bw2'", "z2", "z2'"
+                    ],
+                ];
+                foreach ($moveMap as $prefixer => $originMoves) {
+                    if (array_search($tmp, $originMoves) !== false) {
+                        $prefixes[] = $prefixer;
                         break;
-                    case "Rw'":
-                    case "M":
-                    case "Lw":
-                    case "x'":
-                        $prefixes[] = "x";
-                        break;
-                    case "Rw2":
-                    case "Rw2'":
-                    case "M2":
-                    case "M2'":
-                    case "Lw2":
-                    case "Lw2'":
-                    case "x2":
-                    case "x2'":
-                        $prefixes[] = "x2";
-                        break;
-                    case "Uw":
-                    case "E'":
-                    case "Dw'":
-                    case "y":
-                        $prefixes[] = "y'";
-                        break;
-                    case "Uw'":
-                    case "E":
-                    case "Dw":
-                    case "y'":
-                        $prefixes[] = "y";
-                        break;
-                    case "Uw2":
-                    case "Uw2'":
-                    case "E2":
-                    case "E2'":
-                    case "Dw2":
-                    case "Dw2'":
-                    case "y2":
-                    case "y2'":
-                        $prefixes[] = "y2";
-                        break;
-                    case "Fw":
-                    case "S":
-                    case "Bw'":
-                    case "z":
-                        $prefixes[] = "z'";
-                        break;
-                    case "Fw'":
-                    case "S'":
-                    case "Bw":
-                    case "z'":
-                        $prefixes[] = "z";
-                        break;
-                    case "Fw2":
-                    case "Fw2'":
-                    case "S2":
-                    case "S2'":
-                    case "Bw2":
-                    case "Bw2'":
-                    case "z2":
-                    case "z2'":
-                        $prefixes[] = "z2";
-                        break;
+                    }
                 }
             }
             array_unshift($rev, $tmp);
@@ -139,29 +94,10 @@ class Algorithm extends Model {
                 $cube->$func($amount, $end);
             } else {
                 $func = 'move' . strtoupper($matches[3]);
-                switch ($matches[3]) {
-                    case 'U':
-                    case 'R':
-                    case 'F':
-                    case 'D':
-                    case 'L':
-                    case 'B':
-                    case 'E':
-                    case 'M':
-                    case 'S':
-                    case 'x':
-                    case 'y':
-                    case 'z':
-                        $cube->$func($amount);
-                        break;
-                    case 'u':
-                    case 'r':
-                    case 'f':
-                    case 'd':
-                    case 'l':
-                    case 'b':
-                        $cube->$func($amount, 2, 2);
-                        break;
+                if (strpos($matches[3], 'URFDLBEMSxyz') !== false) {
+                    $cube->$func($amount);
+                } elseif (strpos($matches[3], 'urfdlb') !== false) {
+                    $cube->$func($amount, 2, 2);
                 }
             }
         }

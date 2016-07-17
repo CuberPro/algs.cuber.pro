@@ -48,5 +48,4 @@ class SignupForm extends Users {
         }
         return Yii::$app->user->login($this);
     }
-
 }
