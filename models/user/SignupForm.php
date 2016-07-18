@@ -29,7 +29,7 @@ class SignupForm extends Users {
             ['name', 'string', 'length' => [1, 20]],
             ['name', 'match', 'pattern' => '/^[a-zA-Z0-9 _-]{1,20}$/', 'message' => 'The name can only consist of letters, digits, spaces, underscores and dashes'],
             ['plainPassword', 'string', 'length' => [8, 32]],
-            ['plainPassword', 'match', 'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,32}$/', 'message' => 'The password must have at least one capital letter, one lowercase letter and one digit'],
+            ['plainPassword', 'match', 'pattern' => '/^(?=.*[A-Za-z])(?=.*[0-9]).{8,32}$/', 'message' => 'The password must have at least one letter and one digit'],
             ['u', 'safe'],
         ];
     }
