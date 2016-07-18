@@ -22,7 +22,7 @@ OAuthAsset::register($this);
         <?php Pjax::begin();
         $form = ActiveForm::begin([
     'id' => 'register-form',
-    'action' => Url::toRoute(['user/register']),
+    'action' => Url::toRoute(['user/signup']),
     'options' => [
         // 'target' => '_blank',
       'data' => [

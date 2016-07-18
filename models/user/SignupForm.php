@@ -34,7 +34,7 @@ class SignupForm extends Users {
         ];
     }
 
-    public function register() {
+    public function signup() {
         $valid = $this->validate();
         if (!$valid) {
             return false;
