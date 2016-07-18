@@ -40,11 +40,30 @@ class LoginForm extends Users {
         if (!$user) {
             return false;
         }
-        $valid = Yii::$app->security->validatePassword($this->plainPassword, $user->password);
+        $valid = $this->validatePassword($this->plainPassword, $user->password);
         if (!$valid) {
-            $this->addError('plainPassword', 'The password is incorrect.');
             return false;
         }
         return Yii::$app->user->login($user, $this->remember ? Yii::$app->params['user.rememberLoginTime'] : 0);
     }
+
+    private function validatePassword($plainPassword, $savedHash) {
+
+        // empty password
+        if ($savedHash === self::EMPTY_PASSWORD) {
+            $this->addError(
+                'plainPassword',
+                "This user doesn't have a password set, please use associated 3rd party website to login."
+            );
+            return false;
+        }
+
+        $valid = Yii::$app->security->validatePassword($plainPassword, $savedHash);
+        if (!$valid) {
+            $this->addError('plainPassword', 'The password is incorrect.');
+            return false;
+        }
+        return true;
+    }
+
 }

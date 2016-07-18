@@ -27,6 +27,8 @@ class Users extends ActiveRecord implements IdentityInterface {
     const STATUS_NEEDS_CONFIRM = 1;
     const STATUS_BANNED = 2;
 
+    const EMPTY_PASSWORD = '######';
+
     /**
      * @inheritdoc
      */
