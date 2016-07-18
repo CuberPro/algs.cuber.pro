@@ -1,9 +1,8 @@
 <?php
 
-namespace app\models;
+namespace app\models\user;
 
 use Yii;
-use app\models\Users;
 
 class LoginForm extends Users {
 
@@ -48,5 +47,4 @@ class LoginForm extends Users {
         }
         return Yii::$app->user->login($user, $this->remember ? Yii::$app->params['user.rememberLoginTime'] : 0);
     }
-
 }

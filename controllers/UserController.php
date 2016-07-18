@@ -7,8 +7,8 @@ use yii\web\Controller;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
 use yii\web\ForbiddenHttpException;
-use app\models\LoginForm;
-use app\models\SignupForm;
+use app\models\user\LoginForm;
+use app\models\user\SignupForm;
 
 class UserController extends Controller {
 
