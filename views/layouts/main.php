@@ -4,12 +4,38 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
+
+if (Yii::$app->user->identity != null) {
+    $userItem = [
+        [
+            'label' => Yii::$app->user->identity->name,
+            'items' => [
+                [
+                    'label' => 'Sign Out',
+                    'url' => Url::toRoute(['user/logout', 'u' => Url::to()]),
+                ],
+            ],
+        ],
+    ];
+} else {
+    $userItem = [
+        [
+            'label' => 'Sign In',
+            'url' => Url::toRoute(['user/login', 'u' => Url::to()]),
+        ],
+        [
+            'label' => 'Sign Up',
+            'url' => Url::toRoute(['user/signup', 'u' => Url::to()]),
+        ],
+    ];
+}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -35,9 +61,7 @@ AppAsset::register($this);
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            //['label' => 'Home', 'url' => ['/site/index']],
-        ],
+        'items' => array_merge([], $userItem),
     ]);
     NavBar::end();
     ?>

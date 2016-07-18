@@ -16,21 +16,18 @@ use Yii;
  * @property Subsets $subset0
  * @property Cases $case0
  */
-class CasesInSubset extends \yii\db\ActiveRecord
-{
+class CasesInSubset extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'Cases_In_Subset';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['cube', 'subset', 'case', 'sequence'], 'required'],
             [['sequence'], 'integer'],
@@ -47,8 +44,7 @@ class CasesInSubset extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'cube' => Yii::t('db', 'Cube'),
             'subset' => Yii::t('db', 'Subset'),
@@ -61,20 +57,18 @@ class CasesInSubset extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSubset0()
-    {
+    public function getSubset0() {
         return $this->hasOne(Subsets::className(), ['cube' => 'cube', 'name' => 'subset']);
     }
 
     public function getCube0() {
-        return $this->hasOne(Cubes::className(), ['id' => 'cube'])->viaTable('Subsets', ['cube' => 'cube', 'name' => 'subset']);
+        return $this->hasOne(Cubes::className(), ['id' => 'cube'])->via('subset0');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCase0()
-    {
+    public function getCase0() {
         return $this->hasOne(Cases::className(), ['id' => 'case']);
     }
 }

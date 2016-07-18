@@ -38,7 +38,7 @@ class ImportController extends Controller {
      * grab content from algdb.net
      */
     public function actionAlgdb($conf) {
-        $conf = require($conf);
+        $conf = require $conf;
         foreach ($conf as $cube => $subsets) {
             $cube = strval($cube);
             foreach ($subsets as $id => $name) {
@@ -55,10 +55,8 @@ class ImportController extends Controller {
                 }
                 $url = $this->getUrl($id);
                 $this->getCases($url, $cube, $subset);
-                // break 2;
             }
         }
-        // echo "\n";
     }
 
     private function getCases($url, $cube, $subset) {
@@ -73,13 +71,17 @@ class ImportController extends Controller {
             $algoText = explode("\n", $algoText);
             $algoText = $algoText[0];
             $algoText = trim($algoText);
-            $algoText = str_replace(['u', 'r', 'f', 'd', 'l', 'b', '’'], ['Uw', 'Rw', 'Fw', 'Dw', 'Lw', 'Bw', "'"], $algoText);
-            if (preg_match("/(\d+)$/", $name, $matches)) {
+            $algoText = str_replace(
+                ['u', 'r', 'f', 'd', 'l', 'b', '’'],
+                ['Uw', 'Rw', 'Fw', 'Dw', 'Lw', 'Bw', "'"],
+                $algoText
+            );
+            if (preg_match('/(\d+)$/', $name, $matches)) {
                 $seq = intval($matches[1]);
                 $alias = null;
             } else {
                 $seq = $idx + 1;
-                $alias = trim(preg_replace("/^{$subset->name}/i", '', $name));
+                $alias = trim(preg_replace(sprintf('/^%s/i', $subset->name), '', $name));
             }
             $algo = new Algorithm($algoText);
             $reverse = $algo->getReverse(true);
@@ -121,10 +123,8 @@ class ImportController extends Controller {
                 });
                 $count++;
             }
-            // exit;
         }
-        // echo "\r                                                                ";
-        echo "URL: $url, total: {$trs->size()}, added: {$count}\n";
+        printf("URL: %s, total: %d, added: %d\n", $url, $trs->size(), $count);
         if ($trs->size() !== $count) {
             echo '!!!!!!!!!!!!!!!!!!!!!!' . PHP_EOL;
         }

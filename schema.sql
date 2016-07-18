@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 29, 2016 at 07:03 PM
+-- Generation Time: Jul 18, 2016 at 06:24 AM
 -- Server version: 5.6.31
--- PHP Version: 7.0.7
+-- PHP Version: 7.0.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -57,6 +57,27 @@ CREATE TABLE IF NOT EXISTS `Algs_For_Case` (
 --       `Algs` -> `id`
 --   `case`
 --       `Cases` -> `id`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Auth`
+--
+
+CREATE TABLE IF NOT EXISTS `Auth` (
+  `user_id` int(11) NOT NULL COMMENT 'user id',
+  `source` varchar(10) NOT NULL COMMENT 'source site id',
+  `source_id` varchar(255) NOT NULL COMMENT 'user id in source site',
+  `source_name` varchar(255) NOT NULL COMMENT 'user name in source site',
+  PRIMARY KEY (`user_id`,`source`),
+  KEY `source_id` (`source_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- RELATIONS FOR TABLE `Auth`:
+--   `user_id`
+--       `Users` -> `id`
 --
 
 -- --------------------------------------------------------
@@ -139,6 +160,29 @@ CREATE TABLE IF NOT EXISTS `Subsets` (
 --       `Cubes` -> `id`
 --
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Users`
+--
+
+CREATE TABLE IF NOT EXISTS `Users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'user id',
+  `email` varchar(255) NOT NULL COMMENT 'user email',
+  `name` varchar(100) NOT NULL COMMENT 'user name',
+  `password` varchar(255) NOT NULL COMMENT 'password hash',
+  `wcaid` char(10) DEFAULT NULL COMMENT 'wca id of user',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'register time',
+  `status` int(11) NOT NULL COMMENT 'user status',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `wcaid` (`wcaid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+--
+-- RELATIONS FOR TABLE `Users`:
+--
+
 --
 -- Constraints for dumped tables
 --
@@ -147,15 +191,21 @@ CREATE TABLE IF NOT EXISTS `Subsets` (
 -- Constraints for table `Algs_For_Case`
 --
 ALTER TABLE `Algs_For_Case`
-  ADD CONSTRAINT `Algs_For_Case_ibfk_1` FOREIGN KEY (`alg`) REFERENCES `Algs` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `Algs_For_Case_ibfk_2` FOREIGN KEY (`case`) REFERENCES `Cases` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Algs_For_Case_ibfk_1` FOREIGN KEY (`alg`) REFERENCES `Algs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Algs_For_Case_ibfk_2` FOREIGN KEY (`case`) REFERENCES `Cases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Auth`
+--
+ALTER TABLE `Auth`
+  ADD CONSTRAINT `Auth_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Cases_In_Subset`
 --
 ALTER TABLE `Cases_In_Subset`
-  ADD CONSTRAINT `Cases_In_Subset_ibfk_1` FOREIGN KEY (`cube`,`subset`) REFERENCES `Subsets` (`cube`, `name`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `Cases_In_Subset_ibfk_2` FOREIGN KEY (`case`) REFERENCES `Cases` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Cases_In_Subset_ibfk_1` FOREIGN KEY (`cube`,`subset`) REFERENCES `Subsets` (`cube`, `name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Cases_In_Subset_ibfk_2` FOREIGN KEY (`case`) REFERENCES `Cases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Subsets`

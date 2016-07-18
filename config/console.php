@@ -18,13 +18,6 @@ $config = [
     'controllerNamespace' => 'app\commands',
     'components' => $components,
     'params' => $params,
-    /*
-    'controllerMap' => [
-        'fixture' => [ // Fixture generation command line.
-            'class' => 'yii\faker\FixtureController',
-        ],
-    ],
-    */
 ];
 
 if (YII_ENV_DEV) {

@@ -154,7 +154,7 @@ class CubeNNN extends Model {
     }
 
     public function moveX($amount = 1, $slice = null) {
-        if (!isset ($slice)) {
+        if (!isset($slice)) {
             for ($i = 0; $i < $this->size; $i++) {
                 $this->moveX($amount, $i);
             }
@@ -192,7 +192,7 @@ class CubeNNN extends Model {
     }
 
     public function moveY($amount = 1, $slice = null) {
-        if (!isset ($slice)) {
+        if (!isset($slice)) {
             for ($i = 0; $i < $this->size; $i++) {
                 $this->moveY($amount, $i);
             }
@@ -230,7 +230,7 @@ class CubeNNN extends Model {
     }
 
     public function moveZ($amount = 1, $slice = null) {
-        if (!isset ($slice)) {
+        if (!isset($slice)) {
             for ($i = 0; $i < $this->size; $i++) {
                 $this->moveZ($amount, $i);
             }
