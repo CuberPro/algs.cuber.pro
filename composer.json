@@ -13,7 +13,8 @@
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "^2.0.5",
-        "yiisoft/yii2-bootstrap": "^2.0"
+        "yiisoft/yii2-bootstrap": "^2.0",
+        "yiisoft/yii2-authclient": "^2.0"
     },
     "require-dev": {
         "electrolinux/phpquery": "*",
@@ -26,7 +27,7 @@
     },
     "scripts": {
         "pre-update-cmd": [
-            "@composer global require \"fxp/composer-asset-plugin:~1.1.1\""
+            "@composer global require \"fxp/composer-asset-plugin:^1.2.0\""
         ],
         "post-update-cmd": [
             "@create-local-config-files",

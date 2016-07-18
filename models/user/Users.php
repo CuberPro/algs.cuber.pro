@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\user;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -10,20 +10,24 @@ use yii\web\IdentityInterface;
  * This is the model class for table "Users".
  *
  * @property integer $id
+ * @property string $email
  * @property string $name
  * @property string $password
- * @property string $email
+ * @property string $wcaid
  * @property string $created
  * @property integer $status
+ *
+ * @property Auth[] $auths
  */
 class Users extends ActiveRecord implements IdentityInterface {
 
     const AUTH_KEY_PREFIX = 'algs_users_auth_key_';
-    const COOKIE_VALID_TIME = 86400;
 
     const STATUS_ACTIVATED = 0;
     const STATUS_NEEDS_CONFIRM = 1;
     const STATUS_BANNED = 2;
+
+    const EMPTY_PASSWORD = '######';
 
     /**
      * @inheritdoc
@@ -37,13 +41,14 @@ class Users extends ActiveRecord implements IdentityInterface {
      */
     public function rules() {
         return [
-            [['name', 'password', 'email', 'status'], 'required'],
+            [['email', 'name', 'password', 'status'], 'required'],
             [['created'], 'safe'],
             [['status'], 'integer'],
+            [['email', 'password'], 'string', 'max' => 255],
             [['name'], 'string', 'max' => 100],
-            [['password', 'email'], 'string', 'max' => 255],
-            [['name'], 'unique'],
+            [['wcaid'], 'string', 'max' => 10],
             [['email'], 'unique'],
+            [['wcaid'], 'unique'],
         ];
     }
 
@@ -53,9 +58,10 @@ class Users extends ActiveRecord implements IdentityInterface {
     public function attributeLabels() {
         return [
             'id' => Yii::t('db', 'ID'),
+            'email' => Yii::t('db', 'Email'),
             'name' => Yii::t('db', 'Name'),
             'password' => Yii::t('db', 'Password'),
-            'email' => Yii::t('db', 'Email'),
+            'wcaid' => Yii::t('db', 'WCA ID'),
             'created' => Yii::t('db', 'Created'),
             'status' => Yii::t('db', 'Status'),
         ];
@@ -90,8 +96,8 @@ class Users extends ActiveRecord implements IdentityInterface {
                 unset($cachedAuthKeys[$key]);
             }
         }
-        $cachedAuthKeys[$authKey] = $now + self::COOKIE_VALID_TIME;
-        $cache->set($this->authKeyCacheKey, $cachedAuthKeys, self::COOKIE_VALID_TIME);
+        $cachedAuthKeys[$authKey] = $now + Yii::$app->params['user.rememberLoginTime'];
+        $cache->set($this->authKeyCacheKey, $cachedAuthKeys, Yii::$app->params['user.rememberLoginTime']);
         return $authKey;
     }
 
@@ -108,5 +114,12 @@ class Users extends ActiveRecord implements IdentityInterface {
             }
         }
         return false;
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuths() {
+        return $this->hasMany(Auth::className(), ['user_id' => 'id']);
     }
 }

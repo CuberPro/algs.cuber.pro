@@ -1,9 +1,8 @@
 <?php
 
-namespace app\models;
+namespace app\models\user;
 
 use Yii;
-use app\models\Users;
 
 class SignupForm extends Users {
 

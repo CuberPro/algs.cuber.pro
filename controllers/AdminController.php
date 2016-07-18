@@ -5,7 +5,6 @@ namespace app\controllers;
 use Yii;
 use app\models\cube\CubeNNN;
 use app\models\cube\Algorithm;
-use app\models\Users;
 use yii\web\Controller;
 
 class AdminController extends Controller {
