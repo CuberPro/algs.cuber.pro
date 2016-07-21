@@ -18,6 +18,6 @@ trait CommonTrait {
     }
 
     private function setUrls() {
-        $this->returnUrl = Url::toRoute(['oauth/auth', 'authclient' => $this->defaultName()], 'https');
+        $this->returnUrl = Url::toRoute(['oauth/auth', 'authclient' => $this->name], 'https');
     }
 }
