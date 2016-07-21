@@ -21,11 +21,11 @@ return [
             'clientSecret' => 'client_secret',
             'scope' => 'email',
         ],
-        // 'twitter' => [
-        //     'class' => 'app\models\auth\clients\Twitter',
-        //     'consumerKey' => 'consumer_key',
-        //     'consumerSecret' => 'consumer_secret',
-        // ],
+        'twitter' => [
+            'class' => 'app\models\auth\clients\Twitter',
+            'consumerKey' => 'consumer_key',
+            'consumerSecret' => 'consumer_secret',
+        ],
         'github' => [
             'class' => 'app\models\auth\clients\GitHub',
             'clientId' => 'client_id',
