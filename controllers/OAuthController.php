@@ -67,7 +67,7 @@ class OAuthController extends Controller {
         $auth = new Auth;
         $auth->source = $source;
         $auth->source_id = strval($sourceId);
-        $auth->source_name = strval($name);
+        $auth->source_name = $name;
 
         // match user by email
         $user = Users::findOne(['email' => $email]);

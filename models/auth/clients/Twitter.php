@@ -28,6 +28,8 @@ class Twitter extends TwitterParent {
     }
 
     protected function initUserAttributes() {
-        return $this->api('account/verify_credentials.json', 'GET', ['include_email' => 'true']);
+        $user = $this->api('account/verify_credentials.json', 'GET', ['include_email' => 'true']);
+        $user['id'] = ArrayHelper::getValue($user, 'id_str', strval($user['id']));
+        return $user;
     }
 }
