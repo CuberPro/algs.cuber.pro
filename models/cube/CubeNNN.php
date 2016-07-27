@@ -17,10 +17,6 @@ class CubeNNN extends Model {
     const B = 'b';
     const NONE = 'n';
 
-    const X = 0;
-    const Y = 1;
-    const Z = 2;
-
     private $stickers;
     private $size;
 
