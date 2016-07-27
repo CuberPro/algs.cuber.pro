@@ -2,10 +2,12 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\db\CasesInSubset;
 use app\models\db\Cases;
 use yii\data\ArrayDataProvider;
 use yii\web\Controller;
+use yii\web\Response;
 
 /**
  * CasesController implements the CRUD actions for Cases model.
@@ -52,5 +54,49 @@ class CasesController extends Controller {
             'model' => $case,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionUpdate() {
+        $data = [];
+        do {
+            $currentCase = Cases::findOne(Yii::$app->request->post('id'));
+            if (!$currentCase) {
+                $data = [
+                    'success' => false,
+                    'message' => 'Cannot find the case',
+                ];
+                break;
+            }
+            $newStickers = Yii::$app->request->post('stickers');
+            $newId = md5($newStickers);
+            $newCase = Cases::findOne($newId);
+            if ($newCase) {
+                $data = [
+                    'success' => false,
+                    'message' => 'Duplicated cases',
+                ];
+                break;
+            }
+            $currentCase->id = $newId;
+            $currentCase->state = $newStickers;
+            if (!$currentCase->save()) {
+                $data = [
+                    'success' => false,
+                    'message' => 'Save failed',
+                ];
+                break;
+            }
+            $data = [
+                'success' => true,
+                'data' => [
+                    'id' => $newId,
+                ],
+            ];
+        } while (0);
+        $response = new Response([
+            'format' => Response::FORMAT_JSON,
+            'data' => $data,
+        ]);
+        return $response;
     }
 }

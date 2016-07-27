@@ -115,4 +115,11 @@ $imgParams = [
             </div>
         </div>
     </div>
+    <div id="err-msg" class="alert col-xs-12 text-center">
+        <button class="close">&times;</button>
+        <span></span>
+    </div>
+    <div class="save-btn col-xs-12 text-center">
+        <button class="btn btn-primary" id="save">Save</button>
+    </div>
 </div>
