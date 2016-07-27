@@ -10,6 +10,20 @@ use yii\web\Controller;
 
 class AdminController extends Controller {
 
+    public function behaviors() {
+        return [
+            'access' => [
+                'class' => 'yii\filters\AccessControl',
+                'rules' => [
+                    'admin' => [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ]
+                ],
+            ]
+        ];
+    }
+
     public function actionIndex() {
         $cube = new CubeNNN(3);
         $algo = new Algorithm("R U R' x");

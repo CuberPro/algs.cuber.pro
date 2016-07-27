@@ -14,6 +14,31 @@ use yii\web\Response;
  */
 class CasesController extends Controller {
 
+    public function behaviors() {
+        return [
+            'access' => [
+                'class' => 'yii\filters\AccessControl',
+                'only' => ['update'],
+                'rules' => [
+                    'adminCanUpdate' => [
+                        'allow' => true,
+                        'actions' => ['update'],
+                        'roles' => ['editCase'],
+                        'verbs' => ['post'],
+                    ]
+                ],
+                'denyCallback' => function($rule, $action) {
+                    $data = [
+                        'success' => false,
+                        'message' => 'Access denied',
+                    ];
+                    Yii::$app->response->format = Response::FORMAT_JSON;
+                    Yii::$app->response->data = $data;
+                }
+            ]
+        ];
+    }
+
     public function actionView($cubeId, $subsetName, $caseName) {
         $case = CasesInSubset::find()
             ->where([
