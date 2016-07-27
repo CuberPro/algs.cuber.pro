@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `Auth` (
   `source_id` varchar(255) NOT NULL COMMENT 'user id in source site',
   `source_name` varchar(255) NOT NULL COMMENT 'user name in source site',
   PRIMARY KEY (`user_id`,`source`),
-  KEY `source_id` (`source_id`)
+  UNIQUE KEY `source_id` (`source`,`source_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
