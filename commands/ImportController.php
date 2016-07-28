@@ -6,6 +6,8 @@ use yii\console\Controller;
 use app\models\db\Subsets;
 use app\models\db\Cases;
 use app\models\db\CasesInSubset;
+use app\models\db\Algs;
+use app\models\db\AlgsForCase;
 use app\models\cube\Algorithm;
 use app\models\cube\CubeNNN;
 use phpQuery;
@@ -53,13 +55,13 @@ class ImportController extends Controller {
                     $subset->view = 'plan';
                     $subset->save();
                 }
-                $url = $this->getUrl($id);
-                $this->getCases($url, $cube, $subset);
+                $this->getCases($cube, $subset, $id);
             }
         }
     }
 
-    private function getCases($url, $cube, $subset) {
+    private function getCases($cube, $subset, $algdbSubsetId) {
+        $url = $this->getUrl($algdbSubsetId);
         $count = 0;
         phpQuery::newDocumentFile($url);
         $trs = pq('tbody tr');
@@ -67,15 +69,7 @@ class ImportController extends Controller {
             $it = pq($tr);
             $name = $it->find('td:first-child')->text();
             $algoText = $it->find('td:last-child')->text();
-            $algoText = trim($algoText);
-            $algoText = explode("\n", $algoText);
-            $algoText = $algoText[0];
-            $algoText = trim($algoText);
-            $algoText = str_replace(
-                ['u', 'r', 'f', 'd', 'l', 'b', '’'],
-                ['Uw', 'Rw', 'Fw', 'Dw', 'Lw', 'Bw', "'"],
-                $algoText
-            );
+            $this->formatAlgoText($algoText);
             if (preg_match('/(\d+)$/', $name, $matches)) {
                 $seq = intval($matches[1]);
                 $alias = null;
@@ -102,7 +96,7 @@ class ImportController extends Controller {
                         'state' => $state,
                     ]);
                 }
-                Cases::getDb()->transaction(function ($db) use ($cube, $subset, $case, $seq, $alias) {
+                Cases::getDb()->transaction(function ($db) use ($cube, $subset, $case, $seq, $alias, $caseInSubset) {
                     $success = $case->save();
                     if (!$success) {
                         var_dump($case->attributes);
@@ -123,11 +117,71 @@ class ImportController extends Controller {
                 });
                 $count++;
             }
+            $this->getAlgs($cube, $subset, $algdbSubsetId, $caseInSubset, $name);
         }
         printf("URL: %s, total: %d, added: %d\n", $url, $trs->size(), $count);
-        if ($trs->size() !== $count) {
-            echo '!!!!!!!!!!!!!!!!!!!!!!' . PHP_EOL;
+    }
+
+    private function getAlgs($cube, $subset, $algdbSubsetId, $caseInSubset, $algdbCaseName) {
+        $url = $this->getUrl($algdbSubsetId, $algdbCaseName);
+        $count = 0;
+        $case = $caseInSubset->case0;
+        phpQuery::newDocumentFile($url);
+        $trs = pq('tbody tr');
+        foreach ($trs as $tr) {
+            $it = pq($tr);
+            $algoText = $it->find('td:first-child a')->text();
+            $this->formatAlgoText($algoText);
+            if (empty($algoText)) {
+                continue;
+            }
+            $algo = new Algorithm($algoText);
+            $algoHash = md5(strval($algo));
+            $data = [
+                'alg' => $algoHash,
+                'case' => $case->id,
+            ];
+            $algForCase = AlgsForCase::findOne($data);
+            if ($algForCase == null) {
+                $alg = Algs::findOne(['id' => $algoHash]);
+                if (!$alg) {
+                    $alg = new Algs([
+                        'id' => $algoHash,
+                        'text' => strval($algo),
+                    ]);
+                }
+                Algs::getDb()->transaction(function ($db) use ($alg, $case, $algForCase) {
+                    $success = $alg->save();
+                    if (!$success) {
+                        var_dump($alg->attributes);
+                        exit;
+                    }
+                    $algForCase = new AlgsForCase([
+                        'alg' => $alg->id,
+                        'case' => $case->id,
+                    ]);
+                    $success = $algForCase->save();
+                    if (!$success) {
+                        var_dump($algForCase->attributes);
+                        exit;
+                    }
+                });
+                $count++;
+            }
         }
+        printf("\tURL: %s, total: %d, added: %d\n", $url, $trs->size(), $count);
+    }
+
+    private function formatAlgoText(&$algoText) {
+        $algoText = trim($algoText);
+        $algoText = explode("\n", $algoText);
+        $algoText = $algoText[0];
+        $algoText = trim($algoText);
+        $algoText = str_replace(
+            ['u', 'r', 'f', 'd', 'l', 'b', '’', '.'],
+            ['Uw', 'Rw', 'Fw', 'Dw', 'Lw', 'Bw', "'", ''],
+            $algoText
+        );
     }
 
     private function getNewCube($id, $subset) {
@@ -150,7 +204,7 @@ class ImportController extends Controller {
             rawurlencode($subsetId),
         ];
         if (isset($caseName)) {
-            $arr[] = rawurlencode($caseName);
+            $arr[] = rawurlencode(trim($caseName));
         }
         return implode('/', $arr);
     }
