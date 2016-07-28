@@ -2,16 +2,14 @@
 
 namespace app\models\auth\clients;
 
-use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use app\utils\Converter;
+use app\models\auth\AuthHelper;
 
 trait CommonTrait {
 
     public function buildAuthUrl(array $params = []) {
-        $state = Yii::$app->request->queryParams;
-        $state = Converter::base64UrlEncode(json_encode($state));
+        $state = AuthHelper::generateState();
         $params['state'] = ArrayHelper::getValue($params, 'state', $state);
 
         return parent::buildAuthUrl($params);

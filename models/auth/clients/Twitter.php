@@ -2,12 +2,10 @@
 
 namespace app\models\auth\clients;
 
-use Yii;
 use yii\authclient\clients\Twitter as TwitterParent;
-use yii\authclient\OAuthToken;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use app\utils\Converter;
+use app\models\auth\AuthHelper;
 
 class Twitter extends TwitterParent {
     public $attributeNames = [
@@ -18,8 +16,7 @@ class Twitter extends TwitterParent {
 
     public function init() {
         parent::init();
-        $state = Yii::$app->request->queryParams;
-        $state = Converter::base64UrlEncode(json_encode($state));
+        $state = AuthHelper::generateState();
         $this->returnUrl = Url::toRoute([
             'oauth/auth',
             'authclient' => $this->name,
