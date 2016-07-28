@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 27, 2016 at 06:05 PM
+-- Generation Time: Jul 28, 2016 at 07:05 AM
 -- Server version: 5.6.31
 -- PHP Version: 7.0.8
 
@@ -109,9 +109,10 @@ CREATE TABLE IF NOT EXISTS `Cases_In_Subset` (
   `case` char(32) NOT NULL COMMENT 'case id',
   `sequence` int(11) NOT NULL COMMENT 'case order in subset',
   `alias` varchar(50) DEFAULT NULL COMMENT 'case alias',
-  UNIQUE KEY `unique_case` (`cube`,`subset`,`sequence`,`case`) USING BTREE,
-  UNIQUE KEY `unique_alias` (`cube`,`subset`,`sequence`,`alias`) USING BTREE,
-  KEY `Cases_In_Subset_ibfk_2` (`case`)
+  UNIQUE KEY `unique_case` (`cube`,`subset`,`case`) USING BTREE,
+  UNIQUE KEY `unique_sequence` (`cube`,`subset`,`sequence`) USING BTREE,
+  UNIQUE KEY `unique_alias` (`cube`,`subset`,`alias`) USING BTREE,
+  KEY `case` (`case`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
