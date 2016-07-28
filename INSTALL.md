@@ -18,6 +18,7 @@ Table of Contents
  - [Nginx Configuration](#nginx-configuration)
  - [PHP Configuration](#php-configuration)
  - [Database Schema](#database-schema)
+ - [Prepare Authorization Data](#prepare-authorization-data)
  - [Configurations](#configurations)
 
 ## Requirements
@@ -73,6 +74,8 @@ brew install npm
 
 ### Install Imagemagick
 
+This is for the embedding visualcube project to convert generated svg pictures to png.
+
 ```bash
 brew install imagemagick
 ```
@@ -123,12 +126,21 @@ env[PATH] = /usr/local/bin:/usr/bin:/bin
 Run `schema.sql` to create the database for the app, and assign privileges to a user.
 If you want to enable cache of the submodule `visualcube`, also run the `db_schema.sql` in that submodule(which is located in the `web` directory).
 
+### Prepare Authorization Data
+
+use the `yii` console command to do this
+
+```bash
+yii migrate --migrationPath=@yii/rbac/migrations
+```
+
 ### Configurations
 
-To protect some private credentials, it is highly recommended to have a 'local copy' of some config files. In this project, there are two.
+To protect some private credentials, it is highly recommended to have a 'local copy' of some config files. In this project, there are three.
 
  - One is `config/web/request.php`, copy it to `request.local.php` and add a random string to `cookieValidationKey`;
- - The other one is `config/common/db.php`, copy it to `db.local.php`, it has the credentials for the database, so configure it according to your own situation.
+ - Another one is `config/common/db.php`, copy it to `db.local.php`, it has the credentials for the database, so configure it according to your own situation;
+ - Finally, `config/web/authClientCollection.php`, copy it to `authClientCollection.local.php`, it stores api keys of oauth applications used in the project.
 
 #### Visualcube Configurations
 

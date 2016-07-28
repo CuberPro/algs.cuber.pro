@@ -39,7 +39,8 @@
         ],
         "create-local-config-files": [
             "[[ -f config/common/db.local.php ]] || cp -n config/common/db.php config/common/db.local.php",
-            "[[ -f config/web/request.local.php ]] || cp -n config/web/request.php config/web/request.local.php"
+            "[[ -f config/web/request.local.php ]] || cp -n config/web/request.php config/web/request.local.php",
+            "[[ -f config/web/authClientCollection.local.php ]] || cp -n config/web/authClientCollection.php config/web/authClientCollection.local.php"
         ],
         "post-create-project-cmd": [
             "yii\\composer\\Installer::postCreateProject"
