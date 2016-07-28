@@ -317,6 +317,20 @@ class CubeNNN extends Model {
         }
     }
 
+    public function isSolved() {
+        foreach ($this->stickers as $face => $stickers) {
+            $appeared = [];
+            foreach ($stickers as $sticker) {
+                $appeared[$sticker] = true;
+            }
+            unset($appeared[self::NONE]);
+            if (count($appeared) > 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function getStickersString() {
         return implode(array_map('implode', $this->stickers));
     }
