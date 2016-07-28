@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 SubsetListAsset::register($this);
 
+$maxAlgShown = Yii::$app->params['subset.maxAlgShown'];
+
 $listLayout = <<<XXX
 <div class="panel-heading">{summary}</div>
 <div class="panel-body">
@@ -23,7 +25,7 @@ $listLayout = <<<XXX
         <thead>
             <tr class="info">
                 <th class="case text-center" colspan="2">Case</th>
-                <th class="alg">Algorithms</th>
+                <th class="alg">Algorithms(Top {$maxAlgShown})</th>
             </tr>
         </thead>
         <tbody>{items}</tbody>

@@ -11,11 +11,8 @@ $imgParams = array_merge([
     'fd' => isset($model['state']) ? $model['state'] : null,
 ]);
 $imgUrl = '/visualcube/visualcube.php?' . http_build_query($imgParams);
-$MAX_ALGS_SHOW = 4;
 $rowspan = count($model['algs']);
 $rowspan = max($rowspan, 1);
-$rowspan = min($rowspan, $MAX_ALGS_SHOW);
-$showedCount = 0;
 ?>
 <tr>
     <td rowspan="<?= $rowspan ?>" class="case-name">
@@ -32,19 +29,17 @@ $showedCount = 0;
         <?php
             $alg = array_shift($model['algs']);
             echo htmlspecialchars($alg['text']);
-            $showedCount++;
         ?>
     </td>
 </tr>
 <?php
-while (count($model['algs']) > 0 && $showedCount < $MAX_ALGS_SHOW):
+while (count($model['algs']) > 0):
 ?>
 <tr>
     <td class="alg">
         <?php
             $alg = array_shift($model['algs']);
             echo htmlspecialchars($alg['text']);
-            $showedCount++;
         ?>
     </td>
 </tr>
