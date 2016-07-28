@@ -1,0 +1,80 @@
+@import 'variables';
+
+.edit-case {
+
+  .colors {
+    padding-top: 3px;
+
+    .color-selector {
+
+      input {
+        display: none;
+      }
+
+      input:checked + label {
+        opacity: 1;
+        box-shadow: 0px 0px 3px 2px #aaa;
+      }
+
+      .select-color {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        position: relative;
+        width: 30px;
+        height: 30px;
+        border: 1px solid black;
+        opacity: 0.3;
+        font-size: 30px;
+        line-height: 30px;
+        text-align: center;
+        transition: all .3s;
+        cursor: pointer;
+        cursor: grab;
+        user-select: none;
+        text-transform: uppercase;
+
+        .face-color();
+        
+        &.f, &.n {
+          color: white;
+        }
+      }
+    }
+  }
+
+  .editor {
+    .face {
+      border: 2px solid black;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+
+      .sticker-row {
+        display: flex;
+        flex-wrap: nowrap;
+        flex-grow: 1;
+
+        .sticker {
+          position: relative;
+          flex-grow: 1;
+          border: 1px solid black;
+          transition: all .4s;
+
+          &:before {
+            display: block;
+            content: '';
+            padding-top: 100%;
+          }
+
+          .face-color();
+        }
+      }
+    }
+  }
+
+  #err-msg {
+    display: none;
+  }
+}

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 18, 2016 at 06:24 AM
+-- Generation Time: Jul 27, 2016 at 06:05 PM
 -- Server version: 5.6.31
 -- PHP Version: 7.0.8
 
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `Auth` (
   `source_id` varchar(255) NOT NULL COMMENT 'user id in source site',
   `source_name` varchar(255) NOT NULL COMMENT 'user name in source site',
   PRIMARY KEY (`user_id`,`source`),
-  KEY `source_id` (`source_id`)
+  UNIQUE KEY `source_id` (`source`,`source_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -171,6 +171,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `email` varchar(255) NOT NULL COMMENT 'user email',
   `name` varchar(100) NOT NULL COMMENT 'user name',
   `password` varchar(255) NOT NULL COMMENT 'password hash',
+  `role` varchar(10) NOT NULL DEFAULT 'user' COMMENT 'the role of the user',
   `wcaid` char(10) DEFAULT NULL COMMENT 'wca id of user',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'register time',
   `status` int(11) NOT NULL COMMENT 'user status',
