@@ -23,7 +23,6 @@ OAuthAsset::register($this);
     'id' => 'login-form',
     'action' => Url::toRoute(['user/login']),
     'options' => [
-        // 'target' => '_blank',
         'data' => [
             'pjax' => true,
         ],

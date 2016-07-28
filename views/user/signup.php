@@ -24,7 +24,6 @@ OAuthAsset::register($this);
     'id' => 'register-form',
     'action' => Url::toRoute(['user/signup']),
     'options' => [
-        // 'target' => '_blank',
       'data' => [
         'pjax' => true,
       ],
