@@ -43,7 +43,7 @@ OAuthAsset::register($this);
     <div class="col-sm-6 oauth">
         <h4>Sign in with: </h4>
         <?= AuthChoice::widget([
-            'baseAuthUrl' => ['oauth/auth'],
+            'baseAuthUrl' => ['oauth/auth', 'u' => Yii::$app->request->get('u', '/')],
             'popupMode' => true,
         ]) ?>
     </div>
