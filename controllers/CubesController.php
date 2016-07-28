@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use app\models\db\Cubes;
 use app\models\db\Subsets;
 use yii\data\ArrayDataProvider;
@@ -26,12 +27,13 @@ class CubesController extends Controller {
     }
 
     public function actionView($cubeId) {
-        $cube = Cubes::find()
-            ->where(['id' => $cubeId])
-            ->with('subsets')
+        $cube = Cubes::findOne($cubeId);
+        if (!$cube) {
+            throw new NotFoundHttpException('Cube not found');
+        }
+        $subsets = $cube->getSubsets()
             ->asArray()
-            ->one();
-        $subsets = empty($cube) ? [] : $cube['subsets'];
+            ->all();
         array_walk($subsets, function(&$item, $index) use ($cube, $cubeId) {
             $item['size'] = $cube['size'];
             $cases = Subsets::find()
