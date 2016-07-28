@@ -5,7 +5,6 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\helpers\Url;
-use yii\filters\AccessControl;
 use yii\web\ForbiddenHttpException;
 use app\models\user\LoginForm;
 use app\models\user\SignupForm;
@@ -17,7 +16,7 @@ class UserController extends Controller {
     public function behaviors() {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => 'yii\filters\AccessControl',
                 'only' => ['login', 'signup', 'logout'],
                 'rules' => [
                     [

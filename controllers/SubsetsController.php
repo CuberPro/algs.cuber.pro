@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\db\Subsets;
 use app\models\db\CasesInSubset;
 use app\models\db\Cases;
@@ -16,6 +17,7 @@ class SubsetsController extends Controller {
             ->with('cube0')
             ->with('subset0')
             ->with('case0')
+            ->orderBy(['sequence' => SORT_ASC])
             ->asArray()
             ->all();
         array_walk($cases, function(&$item, $index) {
@@ -24,7 +26,11 @@ class SubsetsController extends Controller {
             $item['view'] = $item['subset0']['view'];
             $algs = Cases::find()
                 ->where(['id' => $item['case']])
-                ->with('algs')
+                ->with([
+                    'algs' => function ($query) {
+                        $query->limit(Yii::$app->params['subset.maxAlgShown']);
+                    },
+                ])
                 ->asArray()
                 ->one();
             $item['algs'] = $algs['algs'];

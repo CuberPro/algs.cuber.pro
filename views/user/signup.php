@@ -24,7 +24,6 @@ OAuthAsset::register($this);
     'id' => 'register-form',
     'action' => Url::toRoute(['user/signup']),
     'options' => [
-        // 'target' => '_blank',
       'data' => [
         'pjax' => true,
       ],
@@ -43,7 +42,7 @@ OAuthAsset::register($this);
     <div class="col-sm-6 oauth">
         <h4>Sign in with: </h4>
         <?= AuthChoice::widget([
-            'baseAuthUrl' => ['oauth/auth'],
+            'baseAuthUrl' => ['oauth/auth', 'u' => Yii::$app->request->get('u', '/')],
             'popupMode' => true,
         ]) ?>
     </div>

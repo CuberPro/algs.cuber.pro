@@ -13,6 +13,7 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property string $name
  * @property string $password
+ * @property string $role
  * @property string $wcaid
  * @property string $created
  * @property integer $status
@@ -46,7 +47,7 @@ class Users extends ActiveRecord implements IdentityInterface {
             [['status'], 'integer'],
             [['email', 'password'], 'string', 'max' => 255],
             [['name'], 'string', 'max' => 100],
-            [['wcaid'], 'string', 'max' => 10],
+            [['role', 'wcaid'], 'string', 'max' => 10],
             [['email'], 'unique'],
             [['wcaid'], 'unique'],
         ];
@@ -62,6 +63,7 @@ class Users extends ActiveRecord implements IdentityInterface {
             'name' => Yii::t('db', 'Name'),
             'password' => Yii::t('db', 'Password'),
             'wcaid' => Yii::t('db', 'WCA ID'),
+            'role' => Yii::t('db', 'Role'),
             'created' => Yii::t('db', 'Created'),
             'status' => Yii::t('db', 'Status'),
         ];

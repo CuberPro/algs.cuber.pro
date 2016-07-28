@@ -84,6 +84,25 @@ class Algorithm extends Model {
         return implode(' ', $this->moves);
     }
 
+    /**
+     * Concat a list of Algorithm's to one
+     *
+     * @param Algorithm $other Algorithm instance to concat
+     * @param Algorithm $another more Algorithm instance(s) to concat
+     * 
+     * @return Algorithm the final Algorithm
+     */
+    public function concat(Algorithm $other = null, Algorithm $another = null) {
+        $algs = func_get_args();
+        $text = [sprintf('%s', $this)];
+        foreach ($algs as $alg) {
+            if ($alg instanceof Algorithm) {
+                $text[] = sprintf('%s', $alg);
+            }
+        }
+        return new Algorithm(implode(' ', $text));
+    }
+
     public function applyTo(CubeNNN $cube) {
         foreach ($this->moves as $move) {
             preg_match(self::MOVE_PATTERN, $move, $matches);
@@ -94,9 +113,9 @@ class Algorithm extends Model {
                 $cube->$func($amount, $end);
             } else {
                 $func = 'move' . strtoupper($matches[3]);
-                if (strpos($matches[3], 'URFDLBEMSxyz') !== false) {
+                if (strpos('URFDLBEMSxyz', $matches[3]) !== false) {
                     $cube->$func($amount);
-                } elseif (strpos($matches[3], 'urfdlb') !== false) {
+                } elseif (strpos('urfdlb', $matches[3]) !== false) {
                     $cube->$func($amount, 2, 2);
                 }
             }

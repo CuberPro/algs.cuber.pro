@@ -17,10 +17,6 @@ class CubeNNN extends Model {
     const B = 'b';
     const NONE = 'n';
 
-    const X = 0;
-    const Y = 1;
-    const Z = 2;
-
     private $stickers;
     private $size;
 
@@ -319,6 +315,20 @@ class CubeNNN extends Model {
                 $start = 1;
             }
         }
+    }
+
+    public function isSolved() {
+        foreach ($this->stickers as $face => $stickers) {
+            $appeared = [];
+            foreach ($stickers as $sticker) {
+                $appeared[$sticker] = true;
+            }
+            unset($appeared[self::NONE]);
+            if (count($appeared) > 1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public function getStickersString() {

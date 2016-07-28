@@ -9,9 +9,11 @@ use yii\helpers\Url;
 use yii\db\Exception as DbException;
 use app\models\user\Users;
 use app\models\user\Auth;
-use app\utils\Converter;
+use app\models\auth\AuthHelper;
 
 class OAuthController extends Controller {
+
+    private $state;
 
     public function actions() {
         return [
@@ -22,18 +24,20 @@ class OAuthController extends Controller {
         ];
     }
 
-    public function beforeAction($action) {
+    public function init() {
+        parent::init();
         $state = Yii::$app->request->get('state', '');
-        $state = json_decode(Converter::base64UrlDecode($state), true);
-        $loginParams = ['u' => ArrayHelper::getValue($state, 'u', '/')];
+        $this->state = AuthHelper::parseState($state);
+    }
+
+    public function beforeAction($action) {
+        $loginParams = ['u' => ArrayHelper::getValue($this->state, 'u', '/')];
         $this->action->cancelUrl = Url::toRoute(array_merge(Yii::$app->user->loginUrl, $loginParams));
         return true;
     }
 
     public function onAuthSuccess($client) {
-        $state = Yii::$app->request->get('state', '');
-        $state = json_decode(Converter::base64UrlDecode($state), true);
-        $this->action->successUrl = ArrayHelper::getValue($state, 'u', '/');
+        $this->action->successUrl = Url::toRoute(ArrayHelper::getValue($this->state, 'u', '/'), 'http');
 
         $attributes = $client->userAttributes;
         $email = ArrayHelper::getValue($attributes, 'email', null);
@@ -67,7 +71,7 @@ class OAuthController extends Controller {
         $auth = new Auth;
         $auth->source = $source;
         $auth->source_id = strval($sourceId);
-        $auth->source_name = strval($name);
+        $auth->source_name = $name;
 
         // match user by email
         $user = Users::findOne(['email' => $email]);
