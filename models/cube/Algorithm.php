@@ -94,9 +94,9 @@ class Algorithm extends Model {
                 $cube->$func($amount, $end);
             } else {
                 $func = 'move' . strtoupper($matches[3]);
-                if (strpos($matches[3], 'URFDLBEMSxyz') !== false) {
+                if (strpos('URFDLBEMSxyz', $matches[3]) !== false) {
                     $cube->$func($amount);
-                } elseif (strpos($matches[3], 'urfdlb') !== false) {
+                } elseif (strpos('urfdlb', $matches[3]) !== false) {
                     $cube->$func($amount, 2, 2);
                 }
             }
