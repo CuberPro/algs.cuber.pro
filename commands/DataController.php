@@ -13,11 +13,11 @@ use app\models\cube\CubeNNN;
 use phpQuery;
 
 /**
- * Import data from sources, currently supporting algdb.net
+ * Importing, validating data
  */
-class ImportController extends Controller {
+class DataController extends Controller {
 
-    public $defaultAction = 'algdb';
+    public $defaultAction = 'import';
 
     const URL_BASE = 'http://algdb.net';
 
@@ -37,9 +37,9 @@ class ImportController extends Controller {
     ];
 
     /**
-     * grab content from algdb.net
+     * Import data from algdb.net
      */
-    public function actionAlgdb($conf) {
+    public function actionImport($conf) {
         $conf = require $conf;
         foreach ($conf as $cube => $subsets) {
             $cube = strval($cube);
@@ -55,12 +55,12 @@ class ImportController extends Controller {
                     $subset->view = 'plan';
                     $subset->save();
                 }
-                $this->getCases($cube, $subset, $id);
+                $this->importCases($cube, $subset, $id);
             }
         }
     }
 
-    private function getCases($cube, $subset, $algdbSubsetId) {
+    private function importCases($cube, $subset, $algdbSubsetId) {
         $url = $this->getUrl($algdbSubsetId);
         $count = 0;
         phpQuery::newDocumentFile($url);
@@ -117,12 +117,12 @@ class ImportController extends Controller {
                 });
                 $count++;
             }
-            $this->getAlgs($cube, $subset, $algdbSubsetId, $caseInSubset, $name);
+            $this->importAlgs($cube, $subset, $algdbSubsetId, $caseInSubset, $name);
         }
         printf("URL: %s, total: %d, added: %d\n", $url, $trs->size(), $count);
     }
 
-    private function getAlgs($cube, $subset, $algdbSubsetId, $caseInSubset, $algdbCaseName) {
+    private function importAlgs($cube, $subset, $algdbSubsetId, $caseInSubset, $algdbCaseName) {
         $url = $this->getUrl($algdbSubsetId, $algdbCaseName);
         $count = 0;
         $case = $caseInSubset->case0;
@@ -209,7 +209,7 @@ class ImportController extends Controller {
         return implode('/', $arr);
     }
 
-    private function getSubsets() {
+    private function fetchSubsets() {
         $doc = phpQuery::newDocumentFile(self::URL_BASE);
         $subsets = pq('span.shortcut-label');
         $tmp = [];
