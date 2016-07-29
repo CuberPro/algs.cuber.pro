@@ -6,7 +6,7 @@ use yii\base\Model;
 
 class Algorithm extends Model {
 
-    const MOVE_PATTERN = '/^(?:([2-9]|[1-9]\d+)?([URFDLB])w|([URFDLBEMSxyzurfdlb]))([2\']|2\')?$/';
+    const MOVE_PATTERN = "/^(?<noAmount>(?<shift>(?:[2-9]|[1-9]\d+)?)(?<wideMove>(?<wideBase>[URFDLB])w)|(?<base>[URFDLBEMSxyzurfdlb]))(?<amount>(?:[2']|2')?)$/";
 
     private $moves;
 
@@ -36,20 +36,14 @@ class Algorithm extends Model {
             "'" => '',
             '2' => "2'",
             "2'" => '2',
+            '' => "'",
         ];
         $rev = [];
         $prefixes = [];
         foreach ($this->moves as $move) {
-            $tmp = '';
             preg_match(self::MOVE_PATTERN, $move, $matches);
-            if (!empty($matches[2])) {
-                $end = empty($matches[1]) ? 2 : intval($matches[1]);
-                $tmp .= empty($matches[1]) ? '' : $matches[1];
-                $tmp .= $matches[2] . 'w';
-            } else {
-                $tmp .= $matches[3];
-            }
-            $tmp .= empty($matches[4]) ? "'" : $REVERSE_MAP[$matches[4]];
+            $tmp = $matches['noAmount'];
+            $tmp .= $REVERSE_MAP[$matches['amount']];
             if ($prefix) {
                 $moveMap = [
                     "x'" => ["Rw", "M'", "Lw'", "x"],
@@ -106,16 +100,16 @@ class Algorithm extends Model {
     public function applyTo(CubeNNN $cube) {
         foreach ($this->moves as $move) {
             preg_match(self::MOVE_PATTERN, $move, $matches);
-            $amount = empty($matches[4]) ? 1 : strpos("2'", $matches[4]) + 2;
-            if (!empty($matches[2])) {
-                $end = empty($matches[1]) ? 2 : intval($matches[1]);
-                $func = 'move' . $matches[2];
+            $amount = empty($matches['amount']) ? 1 : strpos("2'", $matches['amount']) + 2;
+            if (!empty($matches['wideBase'])) {
+                $end = empty($matches['shift']) ? 2 : intval($matches['shift']);
+                $func = 'move' . $matches['wideBase'];
                 $cube->$func($amount, $end);
             } else {
-                $func = 'move' . strtoupper($matches[3]);
-                if (strpos('URFDLBEMSxyz', $matches[3]) !== false) {
+                $func = 'move' . strtoupper($matches['base']);
+                if (strpos('URFDLBEMSxyz', $matches['base']) !== false) {
                     $cube->$func($amount);
-                } elseif (strpos('urfdlb', $matches[3]) !== false) {
+                } elseif (strpos('urfdlb', $matches['base']) !== false) {
                     $cube->$func($amount, 2, 2);
                 }
             }
