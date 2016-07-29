@@ -6,7 +6,7 @@ use yii\base\Model;
 
 class Algorithm extends Model {
 
-    const MOVE_PATTERN = "/^(?<noAmount>(?<shift>(?:[2-9]|[1-9]\d+)?)(?<wideMove>(?<wideBase>[URFDLB])w)|(?<base>[URFDLBEMSxyzurfdlb]))(?<amount>(?:[2']|2')?)$/";
+    const MOVE_PATTERN = "/^(?<noAmount>(?<shift>(?:[2-9]|[1-9]\d+)?)(?<wideMove>(?<wideBase>[URFDLB])w)|(?<base>[URFDLBEMSxyz]))(?<amount>(?:[2']|2')?)$/";
 
     private $moves;
 
@@ -149,8 +149,6 @@ class Algorithm extends Model {
                 $func = 'move' . strtoupper($matches['base']);
                 if (strpos('URFDLBEMSxyz', $matches['base']) !== false) {
                     $cube->$func($amount);
-                } elseif (strpos('urfdlb', $matches['base']) !== false) {
-                    $cube->$func($amount, 2, 2);
                 }
             }
         }
