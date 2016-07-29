@@ -56,6 +56,10 @@ class CasesInSubset extends \yii\db\ActiveRecord {
         ];
     }
 
+    public function getName() {
+        return isset($this->alias) ? $this->alias : $this->subset . ' ' . $this->sequence;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
