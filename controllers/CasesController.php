@@ -28,7 +28,7 @@ class CasesController extends Controller {
                         'verbs' => ['post'],
                     ]
                 ],
-                'denyCallback' => function($rule, $action) {
+                'denyCallback' => function ($rule, $action) {
                     $data = [
                         'success' => false,
                         'message' => 'Access denied',

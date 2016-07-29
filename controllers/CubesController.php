@@ -34,7 +34,7 @@ class CubesController extends Controller {
         $subsets = $cube->getSubsets()
             ->asArray()
             ->all();
-        array_walk($subsets, function(&$item, $index) use ($cube, $cubeId) {
+        array_walk($subsets, function (&$item, $index) use ($cube, $cubeId) {
             $item['size'] = $cube['size'];
             $cases = Subsets::find()
                 ->where(['cube' => $cubeId, 'name' => $item['name']])

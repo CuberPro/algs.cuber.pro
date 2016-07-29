@@ -109,7 +109,7 @@ class OAuthController extends Controller {
         $user->wcaid = $wcaid;
         $user->status = Users::STATUS_ACTIVATED;
 
-        Users::getDb()->transaction(function($db) use ($user, $auth) {
+        Users::getDb()->transaction(function ($db) use ($user, $auth) {
             $res = $user->save();
             if (!$res) {
                 throw new DbException('Create user failed');

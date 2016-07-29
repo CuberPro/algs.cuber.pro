@@ -29,7 +29,7 @@ $imgParams = [
         </div>
         <div class="pull-left">
             <?= Html::ul($case['subsets'], [
-                'item' => function($item, $index) {
+                'item' => function ($item, $index) {
                     return Html::tag(
                         'li',
                         Html::a(
@@ -47,7 +47,7 @@ $imgParams = [
     </div>
     <div class="colors col-xs-12 col-sm-2 col-lg-1">
         <?= Html::ul(['u', 'r', 'f', 'd', 'l', 'b', 'n'], [
-            'item' => function($item, $index) {
+            'item' => function ($item, $index) {
                 return Html::tag(
                     'li',
                     Html::radio(
