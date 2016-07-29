@@ -16,6 +16,7 @@ class Algorithm extends Model {
             return;
         }
         $this->moves = self::filter($algo);
+        $this->simplify();
     }
 
     private static function filter($algo) {
@@ -29,6 +30,45 @@ class Algorithm extends Model {
             $tmp[] = $matches[0];
         }
         return $tmp;
+    }
+
+    private function simplify() {
+        $AMOUNT_MAP = [
+            "'" => 3,
+            '2' => 2,
+            "2'" => 2,
+            '' => 1,
+        ];
+        $moves = $this->moves;
+        $newMoves = [];
+        $newMovesCount = 0;
+        $lastMove = null;
+        foreach ($this->moves as $move) {
+            if (!$lastMove) {
+                $newMoves[$newMovesCount++] = $move;
+                $lastMove = $move;
+                continue;
+            }
+            preg_match(self::MOVE_PATTERN, $lastMove, $lastMoveMatch);
+            preg_match(self::MOVE_PATTERN, $move, $moveMatch);
+            if ($lastMoveMatch['noAmount'] === $moveMatch['noAmount']) {
+                $lastMoveAmount = $AMOUNT_MAP[$lastMoveMatch['amount']];
+                $moveAmount = $AMOUNT_MAP[$moveMatch['amount']];
+                $totalMoveAmount = ($lastMoveAmount + $moveAmount) & 3;
+                if ($totalMoveAmount == 0) {
+                    array_pop($newMoves);
+                    $newMovesCount--;
+                    $lastMove = $newMovesCount == 0 ? null : $newMoves[$newMovesCount - 1];
+                    continue;
+                }
+                $newMoves[$newMovesCount - 1] = $moveMatch['noAmount'] . array_search($totalMoveAmount, $AMOUNT_MAP);
+                $lastMove = $newMoves[$newMovesCount - 1];
+                continue;
+            }
+            $newMoves[$newMovesCount++] = $move;
+            $lastMove = $move;
+        }
+        $this->moves = $newMoves;
     }
 
     public function getReverse($prefix = false) {
