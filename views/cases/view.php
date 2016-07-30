@@ -1,8 +1,8 @@
 <?php
 
-use yii\helpers\Url;
 use yii\grid\GridView;
 use app\assets\CaseViewAsset;
+use app\utils\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\db\Cases */
@@ -31,7 +31,7 @@ $imgParams = [
 ?>
 <div class="case-view">
     <div class="case-img">
-        <img src="<?= Url::toRoute(array_merge(['/visualcube/visualcube.php'], $imgParams)) ?>" alt="<?= $model['name'] ?>">
+        <img src="<?= Url::buildUrl('/visualcube/visualcube.php', $imgParams) ?>" alt="<?= $model['name'] ?>">
     </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

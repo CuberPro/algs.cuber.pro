@@ -1,8 +1,8 @@
 <?php
 
-use yii\helpers\Url;
 use yii\helpers\Html;
 use app\assets\EditCaseAsset;
+use app\utils\Url;
 
 EditCaseAsset::register($this);
 
@@ -20,11 +20,11 @@ $imgParams = [
 <div id="case" class="edit-case clearfix" data-case-id="<?= $case['id'] ?>">
     <div class="case-info clearfix">
         <div class="pull-left text-center">
-            <img src="<?= Url::toRoute(array_merge(['/visualcube/visualcube.php'], $imgParams)) ?>" alt="<?= $case['id'] ?>">
+            <img src="<?= Url::buildUrl('/visualcube/visualcube.php', $imgParams) ?>" alt="<?= $case['id'] ?>">
             <?php if(isset($imgParams['view'])): unset($imgParams['view']); ?>
-                <img src="<?= Url::toRoute(array_merge(['/visualcube/visualcube.php'], $imgParams)) ?>" alt="<?= $case['id'] ?>">
+                <img src="<?= Url::buildUrl('/visualcube/visualcube.php', $imgParams) ?>" alt="<?= $case['id'] ?>">
                 <?php $imgParams['r'] = 'x180y-45x-34'; ?>
-                <img src="<?= Url::toRoute(array_merge(['/visualcube/visualcube.php'], $imgParams)) ?>" alt="<?= $case['id'] ?>">
+                <img src="<?= Url::buildUrl('/visualcube/visualcube.php', $imgParams) ?>" alt="<?= $case['id'] ?>">
             <?php endif; ?>
         </div>
         <div class="pull-left">
