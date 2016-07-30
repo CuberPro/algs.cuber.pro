@@ -5,7 +5,6 @@ namespace app\models\auth\clients;
 use Yii;
 use yii\authclient\clients\GoogleOAuth;
 use yii\helpers\ArrayHelper;
-use app\utils\Converter;
 
 class Google extends GoogleOAuth {
     use CommonTrait;
