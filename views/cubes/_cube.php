@@ -10,7 +10,6 @@ $imgParams = array_merge([
     'bg' => 't',
     'fd' => isset($model['state']) ? $model['state'] : null,
 ]);
-$imgUrl = '/visualcube/visualcube.php?' . http_build_query($imgParams);
 
 ?>
 <a href="<?= Url::toRoute(array_merge($linkHref, [$linkKey => $key])) ?>" class="btn btn-default">

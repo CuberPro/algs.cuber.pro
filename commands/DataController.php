@@ -46,14 +46,11 @@ class DataController extends Controller {
      * @param string $cube   id of the cube
      * @param string $subset name of the subset
      */
-    public function actionValidateAlgs($cube = null, $subset = null, $subsubset = null) {
+    public function actionValidateAlgs($cube = null, $subset = null) {
         $subsets = Subsets::find();
         if (isset($cube)) {
             $subsets->where(['cube' => $cube]);
             if (isset($subset)) {
-                if (isset($subsubset)) {
-                    $subset = $subset . ' ' . $subsubset;
-                }
                 $subsets->andWhere(['like', 'name', $subset]);
             }
         }
