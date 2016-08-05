@@ -73,8 +73,12 @@ class OAuthController extends Controller {
         $auth->source_id = strval($sourceId);
         $auth->source_name = $name;
 
-        // match user by email
-        $user = Users::findOne(['email' => $email]);
+        // try to match user by email if current user has not logon
+        if (Yii::$app->user->isGuest) {
+            $user = Users::findOne(['email' => $email]);
+        } else { // otherwise choose the current user
+            $user = Yii::$app->user->identity;
+        }
         // user found
         if ($user) {
             $auth->user_id = $user->id;
@@ -83,20 +87,20 @@ class OAuthController extends Controller {
                 throw new DbException('Save auth data failed');
             }
             // we consider all users from these sites have a validated email
-            if ($user->status !== Users::STATUS_ACTIVATED) {
-                if (isset($wcaid)) {
-                    $user->wcaid = $wcaid;
-                }
+            if ($user->status !== Users::STATUS_ACTIVATED && $user->email === $email) {
                 $user->status = Users::STATUS_ACTIVATED;
-                $res = $user->save();
-                if (!$res) {
-                    throw new DbException('Update user status failed');
-                }
-            } elseif (isset($wcaid) && $user->wcaid !== $wcaid) {
+            }
+            if (isset($wcaid) && $user->wcaid !== $wcaid) {
                 $user->wcaid = $wcaid;
                 $user->save();
             }
-            Yii::$app->user->login($user);
+            $res = $user->save();
+            if (!$res) {
+                throw new DbException('Update user status failed');
+            }
+            if (Yii::$app->user->isGuest) {
+                Yii::$app->user->login($user);
+            }
             return;
         }
 
