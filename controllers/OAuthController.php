@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\web\Response;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\db\Exception as DbException;
@@ -14,6 +15,30 @@ use app\models\auth\AuthHelper;
 class OAuthController extends Controller {
 
     private $state;
+
+    public function behaviors() {
+        return [
+            'access' => [
+                'class' => 'yii\filters\AccessControl',
+                'only' => ['revoke'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['revoke'],
+                        'roles' => ['@'],
+                    ],
+                ],
+                'denyCallback' => function ($rule, $action) {
+                    $data = [
+                        'success' => false,
+                        'message' => 'Access denied',
+                    ];
+                    Yii::$app->response->format = Response::FORMAT_JSON;
+                    Yii::$app->response->data = $data;
+                },
+            ],
+        ];
+    }
 
     public function actions() {
         return [
@@ -31,9 +56,63 @@ class OAuthController extends Controller {
     }
 
     public function beforeAction($action) {
-        $loginParams = ['u' => ArrayHelper::getValue($this->state, 'u', '/')];
-        $this->action->cancelUrl = Url::toRoute(array_merge(Yii::$app->user->loginUrl, $loginParams));
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+        if ($action == 'auth') {
+            $loginParams = ['u' => ArrayHelper::getValue($this->state, 'u', '/')];
+            $this->action->cancelUrl = Url::toRoute(array_merge(Yii::$app->user->loginUrl, $loginParams));
+        }
         return true;
+    }
+
+    public function actionRevoke() {
+        $source = Yii::$app->request->post('source', '');
+        $source = strtolower($source);
+        $user = Yii::$app->user->identity;
+        $auths = $user->auths;
+        $auth = null;
+        foreach ($auths as $one) {
+            if ($source == $one->source) {
+                $auth = $one;
+                break;
+            }
+        }
+        $data = [];
+        do {
+            if (!$auth) {
+                $data = [
+                    'success' => true,
+                ];
+                break;
+            }
+            if (count($auths) == 1 && $user->password == Users::EMPTY_PASSWORD) {
+                $data = [
+                    'success' => false,
+                    'message' => 'This is the only way you can login',
+                ];
+                break;
+            }
+            $res = $auth->delete();
+            if (!$res) {
+                $data = [
+                    'success' => false,
+                    'message' => 'Unlink failed',
+                ];
+            }
+            if ($source == 'wca') {
+                $user->wcaid = null;
+                $user->save();
+            }
+            $data = [
+                'success' => true,
+            ];
+        } while (0);
+        $response = new Response([
+            'format' => Response::FORMAT_JSON,
+            'data' => $data,
+        ]);
+        return $response;
     }
 
     public function onAuthSuccess($client) {
