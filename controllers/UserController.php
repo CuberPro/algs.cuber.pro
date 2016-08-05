@@ -17,7 +17,6 @@ class UserController extends Controller {
         return [
             'access' => [
                 'class' => 'yii\filters\AccessControl',
-                'only' => ['login', 'signup', 'logout'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -26,7 +25,7 @@ class UserController extends Controller {
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout'],
+                        'actions' => ['profile', 'logout'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -44,10 +43,25 @@ class UserController extends Controller {
             case 'logout':
                 $this->redirect($u);
                 return;
+            case 'profile':
+                $this->redirect(array_merge(Yii::$app->user->loginUrl, ['u' => Url::toRoute([''])]));
+                return;
             default:
                 throw new ForbiddenHttpException('You are not allowed to access this page');
                 return;
         }
+    }
+
+    public function actionProfile() {
+        $user = Yii::$app->user->identity;
+        $authClients = Yii::$app->authClientCollection->getClients();
+        $userClients = $user->getAuths()->asArray()->all();
+        $userClients = array_combine(array_column($userClients, 'source'), $userClients);
+        return $this->render('profile', [
+            'user' => $user,
+            'clients' => $authClients,
+            'userClients' => $userClients,
+        ]);
     }
 
     public function actionLogin($u = '/') {
