@@ -54,8 +54,13 @@ class UserController extends Controller {
 
     public function actionProfile() {
         $user = Yii::$app->user->identity;
+        $authClients = Yii::$app->authClientCollection->getClients();
+        $userClients = $user->getAuths()->asArray()->all();
+        $userClients = array_combine(array_column($userClients, 'source'), $userClients);
         return $this->render('profile', [
             'user' => $user,
+            'clients' => $authClients,
+            'userClients' => $userClients,
         ]);
     }
 
