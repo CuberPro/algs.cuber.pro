@@ -21,7 +21,7 @@ class CasesController extends Controller {
                 'class' => 'yii\filters\AccessControl',
                 'only' => ['update'],
                 'rules' => [
-                    'adminCanUpdate' => [
+                    'editCase' => [
                         'allow' => true,
                         'actions' => ['update'],
                         'roles' => ['editCase'],

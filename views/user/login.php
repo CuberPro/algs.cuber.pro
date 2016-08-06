@@ -20,13 +20,13 @@ OAuthAsset::register($this);
     <div class="col-sm-6 col-md-4 form">
         <?php Pjax::begin();
         $form = ActiveForm::begin([
-    'id' => 'login-form',
-    'action' => Url::toRoute(['user/login']),
-    'options' => [
-        'data' => [
-            'pjax' => true,
-        ],
-    ],
+            'id' => 'login-form',
+            'action' => Url::toRoute(['user/login']),
+            'options' => [
+                'data' => [
+                    'pjax' => true,
+                ],
+            ],
         ]);
         ?>
 
