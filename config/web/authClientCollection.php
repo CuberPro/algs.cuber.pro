@@ -8,12 +8,14 @@ return [
             'clientId' => 'client_id',
             'clientSecret' => 'client_secret',
             'scope' => 'public email',
+            'validateAuthState' => false,
         ],
         'facebook' => [
             'class' => 'app\models\auth\clients\Facebook',
             'clientId' => 'client_id',
             'clientSecret' => 'client_secret',
             'scope' => 'email',
+            'validateAuthState' => false,
         ],
         'twitter' => [
             'class' => 'app\models\auth\clients\Twitter',
@@ -25,12 +27,14 @@ return [
             'clientId' => 'client_id',
             'clientSecret' => 'client_secret',
             'scope' => 'email',
+            'validateAuthState' => false,
         ],
         'github' => [
             'class' => 'app\models\auth\clients\GitHub',
             'clientId' => 'client_id',
             'clientSecret' => 'client_secret',
             'scope' => 'user',
+            'validateAuthState' => false,
         ],
     ],
 ];
