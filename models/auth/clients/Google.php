@@ -3,7 +3,7 @@
 namespace app\models\auth\clients;
 
 use Yii;
-use yii\authclient\clients\Google as GoogleParent;
+use yii\authclient\clients\GoogleOAuth as GoogleParent;
 use yii\helpers\ArrayHelper;
 
 class Google extends GoogleParent {
