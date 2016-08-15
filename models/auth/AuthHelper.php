@@ -3,18 +3,18 @@
 namespace app\models\auth;
 
 use Yii;
-use app\utils\Converter;
+use app\utils\Url;
 
 class AuthHelper {
 
     public static function generateState() {
         $state = Yii::$app->request->queryParams;
-        $state = Converter::base64UrlEncode(json_encode($state));
+        $state = Url::base64UrlEncode(json_encode($state));
         return $state;
     }
 
     public static function parseState($encoded) {
-        $state = Converter::base64UrlDecode($encoded);
+        $state = Url::base64UrlDecode($encoded);
         $state = json_decode($state, true);
         if (!is_array($state)) {
             $state = [];

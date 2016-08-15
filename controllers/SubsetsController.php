@@ -18,11 +18,12 @@ class SubsetsController extends Controller {
             ->with('subset0')
             ->with('case0')
             ->orderBy(['sequence' => SORT_ASC])
-            ->asArray()
             ->all();
-        array_walk($cases, function(&$item, $index) {
+        array_walk($cases, function (&$item, $index) {
+            $itemArray = $item->toArray($item->fields(), $item->extraFields());
+            $itemArray['name'] = $item->name;
+            $item = $itemArray;
             $item['size'] = $item['cube0']['size'];
-            $item['name'] = isset($item['alias']) ? $item['alias'] : ($item['subset'] . ' ' . $item['sequence']);
             $item['view'] = $item['subset0']['view'];
             $algs = Cases::find()
                 ->where(['id' => $item['case']])

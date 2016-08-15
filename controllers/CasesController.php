@@ -7,6 +7,7 @@ use app\models\db\CasesInSubset;
 use app\models\db\Cases;
 use yii\data\ArrayDataProvider;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
@@ -20,14 +21,14 @@ class CasesController extends Controller {
                 'class' => 'yii\filters\AccessControl',
                 'only' => ['update'],
                 'rules' => [
-                    'adminCanUpdate' => [
+                    'editCase' => [
                         'allow' => true,
                         'actions' => ['update'],
                         'roles' => ['editCase'],
                         'verbs' => ['post'],
                     ]
                 ],
-                'denyCallback' => function($rule, $action) {
+                'denyCallback' => function ($rule, $action) {
                     $data = [
                         'success' => false,
                         'message' => 'Access denied',
@@ -53,20 +54,20 @@ class CasesController extends Controller {
             ])
             ->with('cube0')
             ->with('subset0')
-            ->with('case0')
-            ->asArray()
+            ->with([
+                'case0' => function ($query) {
+                    $query->with('algs')->asArray();
+                }
+            ])
             ->one();
-        $algs = [];
-        if ($case) {
-            $algs = Cases::find()
-                ->where(['id' => $case['case']])
-                ->with('algs')
-                ->asArray()
-                ->one()['algs'];
+        if (!$case) {
+            throw new NotFoundHttpException('Case not found');
         }
-        $case['algs'] = $algs;
+        $caseArray = $case->toArray($case->fields(), $case->extraFields());
+        $caseArray['name'] = $case->getName();
+        $case = $caseArray;
+        $case['algs'] = $case['case0']['algs'];
         $case['size'] = $case['cube0']['size'];
-        $case['name'] = isset($case['alias']) ? $case['alias'] : ($case['subset'] . ' ' . $case['sequence']);
         $case['view'] = $case['subset0']['view'];
         $case['state'] = $case['case0']['state'];
         $dataProvider = new ArrayDataProvider([

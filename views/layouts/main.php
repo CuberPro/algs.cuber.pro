@@ -18,8 +18,12 @@ if (Yii::$app->user->identity != null) {
             'label' => Yii::$app->user->identity->name,
             'items' => [
                 [
+                    'label' => 'Profile',
+                    'url' => Url::toRoute(['user/profile']),
+                ],
+                [
                     'label' => 'Sign Out',
-                    'url' => Url::toRoute(['user/logout', 'u' => Url::to()]),
+                    'url' => Url::toRoute(['user/logout', 'u' => isset($this->params['logoutU']) ? $this->params['logoutU'] : Url::to()]),
                 ],
             ],
         ],

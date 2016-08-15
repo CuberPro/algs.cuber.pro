@@ -3,11 +3,10 @@
 namespace app\models\auth\clients;
 
 use Yii;
-use yii\authclient\clients\GoogleOAuth;
+use yii\authclient\clients\GoogleOAuth as GoogleParent;
 use yii\helpers\ArrayHelper;
-use app\utils\Converter;
 
-class Google extends GoogleOAuth {
+class Google extends GoogleParent {
     use CommonTrait;
 
     public $attributeNames = [

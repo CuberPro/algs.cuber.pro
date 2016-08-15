@@ -20,12 +20,15 @@ class CubeNNN extends Model {
     private $stickers;
     private $size;
 
-    public function __construct($size = 3) {
+    public function __construct($size = 3, $stickers = null) {
         $size = intval($size);
         if ($size < self::MIN_SIZE || $size > self::MAX_SIZE) {
             $size = 3;
         }
         $this->size = $size;
+        if (isset($stickers) && $this->setStickersString($stickers)) {
+            return;
+        }
         $this->reset();
     }
 
@@ -351,6 +354,7 @@ class CubeNNN extends Model {
             self::L => str_split(substr($stickers, $stickersPerFace * 4, $stickersPerFace)),
             self::B => str_split(substr($stickers, $stickersPerFace * 5, $stickersPerFace)),
         ];
+        return true;
     }
 
     public function __toString() {
