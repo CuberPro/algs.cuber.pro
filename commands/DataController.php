@@ -33,7 +33,7 @@ class DataController extends Controller {
             'coll' => 'uuuuuuuuurnrrrrrrrfnfffffffdddddddddlnlllllllbnbbbbbbb',
             'f2l' => 'nnnnunnnnnnnrrrrrrnnnffffffdddddddddnnnllllllnnnbbbbbb',
             'ollcp' => 'uuuuuuuuurnrrrrrrrfnfffffffdddddddddlnlllllllbnbbbbbbb',
-            'vrls' => 'uuuuuuuuunnnrrrrrrnnnffffffdddddddddnnnllllllnnnbbbbbb',
+            'vls' => 'uuuuuuuuunnnrrrrrrnnnffffffdddddddddnnnllllllnnnbbbbbb',
             'wvls' => 'uuuuuuuuunnnrrrrrrnnnffffffdddddddddnnnllllllnnnbbbbbb',
         ],
     ];
