@@ -12,7 +12,9 @@ trait CommonTrait {
         $state = AuthHelper::generateState();
         $params['state'] = ArrayHelper::getValue($params, 'state', $state);
 
-        return parent::buildAuthUrl($params);
+        $url = parent::buildAuthUrl($params);
+        $this->setState('authState', $state); // overwrite state set by framework
+        return $url;
     }
 
     private function setUrls() {
